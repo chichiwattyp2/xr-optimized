@@ -1,0 +1,103 @@
+{
+  "version": 2,
+  "name": "xr-home-chat",
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "buildCommand": "npm run build:production",
+  "outputDirectory": "dist",
+  "installCommand": "npm ci",
+  "framework": null,
+  "functions": {
+    "api/chat.js": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "api/realtime-token.js": {
+      "runtime": "nodejs18.x", 
+      "maxDuration": 10,
+      "memory": 512
+    },
+    "api/health.js": {
+      "runtime": "nodejs18.x",
+      "maxDuration": 5,
+      "memory": 128
+    }
+  },
+  "routes": [
+    {
+      "src": "/sw\\.js",
+      "dest": "/sw.js",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Service-Worker-Allowed": "/"
+      }
+    },
+    {
+      "src": "/client\\.min\\.js",
+      "dest": "/client.min.js", 
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection", 
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(self), geolocation=(), gyroscope=(), accelerometer=(), magnetometer=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://aframe.io https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://api.openai.com wss://api.openai.com; media-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
+}

@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>A-Frame + Google + Chat GPT</title>
+
+ 
+
+    <!-- Google Fonts: Asimovian -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Keep only Asimovian loaded to guarantee it’s ready for canvases -->
+    <link href="https://fonts.googleapis.com/css2?family=Asimovian&display=swap" rel="stylesheet">
+<script src="js/openai-client.js"></script>
+
+    <!-- A-Frame + components (v1.0.4 to match your current console) -->
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.7/dist/aframe-controller-cursor-component.min.js" defer></script>
+    <script src="https://unpkg.com/aframe-event-set-component@4.2.1/dist/aframe-event-set-component.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js" defer></script>
+<script src="https://unpkg.com/aframe-environment-component@1.5.x/dist/aframe-environment-component.min.js"></script>
+    <!-- Your scripts -->
+    <script src="sheets.js" defer></script>
+    <script type="module" src="client.js"></script>
+
+    <style>
+      body { margin:0; font-family: Asimovian, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+      #ui {
+        position: fixed; left: 12px; right: 12px; bottom: 12px; display: flex; gap: 8px;
+        z-index: 10; background: rgba(0,0,0,.35); padding: 8px; border-radius: 10px; backdrop-filter: blur(6px);
+      }
+      #prompt { flex: 1; padding: 10px 12px; font-size: 16px; border-radius: 8px; border: 1px solid #333; background:#111; color:#fff; }
+      #send, #voice { padding: 10px 12px; border-radius: 8px; border: 1px solid #333; background:#1b1b1b; color:#fff; cursor:pointer; }
+    </style>
+  </head>
+  <body>
+    <!-- UI overlay -->
+    <div id="ui">
+      <input id="prompt" placeholder="Ask something…" />
+      <button id="send">Send</button>
+      <button id="voice"> Voice</button>
+    </div>
+
+ 
+    <a-scene renderer="colorManagement: true">
+      <!-- Root where sheet tiles / panels get spawned -->
+      <a-entity id="csv-root"></a-entity>
+<a-assets>   <!-- Hidden canvases used as textures (power-of-two heights to prevent WebGL resize spam) -->
+    <canvas id="chatTextCanvas" width="1024" height="256" style="display:none"></canvas>
+    <canvas id="chatHintCanvas" width="1024" height="128" style="display:none"></canvas>
+</a-assets>
+      <a-entity environment="preset: starry; shadow: on; shadowSize: 10; skyType: gradient; skyColor: #cfe2f3; ground: Orography style; groundColor: #f4cccc; grid: none"></a-entity>
+    <a-entity id="rig" movement-controls="controls: checkpoint" checkpoint-controls="mode: animate" position="0 2.22085 6.6555" rotation="0 0 0">
+          <a-camera>
+         <a-entity cursor="" position="0.00705 0.04225 -1.70324" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="shader: flat; color: #ff3300" raycaster=""></a-entity></a-camera></a-entity>
+    
+      <!-- Chat panel using the canvases -->
+      <a-entity id="chatPanel" data-raycastable
+                position="9.43415 3.83854 -1.88325"
+                rotation="0 -45 0" scale="5 5 5">
+        <a-plane width="1.35" height="0.8" color="#111" material="opacity: 0.9"></a-plane>
+
+        <!-- Main chat text (Asimovian via #chatTextCanvas) -->
+        <a-plane id="chatTextPlane"
+                 material="src: #chatTextCanvas; transparent: true; shader: flat"
+                 position="-0.62 0.28 0.01"
+                 scale="0.74 0.30 1"
+                 data-raycastable></a-plane>
+
+        <!-- Hint (Asimovian via #chatHintCanvas) -->
+        <a-plane id="chatHintPlane"
+                 material="src: #chatHintCanvas; transparent: true; shader: flat"
+                 position="-0.62 -0.28 0.01"
+                 scale="0.74 0.22 1"
+                 data-raycastable></a-plane>
+      </a-entity>
+    </a-scene>
+
+    <audio id="assistantAudio" autoplay></audio>
+  </body>
+</html>
