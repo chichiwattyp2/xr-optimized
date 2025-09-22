@@ -1,0 +1,133 @@
+{
+  "name": "xr-home-chat",
+  "version": "2.0.0",
+  "description": "Production-ready VR/AR chat application with comprehensive performance optimizations",
+  "main": "client.js",
+  "keywords": [
+    "vr",
+    "ar",
+    "webxr",
+    "aframe",
+    "openai",
+    "chat",
+    "voice",
+    "performance",
+    "optimization"
+  ],
+  "author": "chichiwattyp2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chichiwattyp2/xr-home-chat.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chichiwattyp2/xr-home-chat/issues"
+  },
+  "homepage": "https://github.com/chichiwattyp2/xr-home-chat#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "build": "node build.js",
+    "build:production": "NODE_ENV=production node build.js",
+    "build:analyze": "node build.js --analyze",
+    "deploy": "npm run build:production && vercel --prod",
+    "deploy:preview": "npm run build && vercel",
+    "deploy:optimize": "node deploy-optimize.js --deploy --production",
+    "optimize": "node deploy-optimize.js",
+    "test": "npm run test:optimizations",
+    "test:optimizations": "node test-optimizations.js",
+    "test:build": "npm run build && echo 'Build test passed'",
+    "test:performance": "node test-optimizations.js --performance",
+    "check-env": "node check-env.js",
+    "verify": "node verify-deployment.js",
+    "analyze": "npm run build:analyze",
+    "clean": "rm -rf dist/ .vercel/",
+    "precommit": "npm run test:optimizations",
+    "predeploy": "npm run check-env && npm run test:build",
+    "postinstall": "npm run check-env || true",
+    "lint": "echo 'Add your linting tool here'",
+    "format": "echo 'Add your formatting tool here'"
+  },
+  "dependencies": {
+    "aframe": "^1.4.0"
+  },
+  "devDependencies": {
+    "terser": "^5.24.0",
+    "clean-css": "^5.3.2",
+    "html-minifier-terser": "^7.2.0",
+    "vercel": "^32.0.0"
+  },
+  "optionalDependencies": {
+    "@lhci/cli": "^0.12.0"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "volta": {
+    "node": "18.18.0",
+    "npm": "9.8.1"
+  },
+  "vercel": {
+    "functions": {
+      "api/chat.js": {
+        "maxDuration": 30
+      },
+      "api/realtime-token.js": {
+        "maxDuration": 10
+      },
+      "api/health.js": {
+        "maxDuration": 5
+      }
+    }
+  },
+  "performance": {
+    "budgets": {
+      "javascript": "500kb",
+      "html": "50kb",
+      "css": "25kb",
+      "images": "1mb",
+      "total": "2mb"
+    }
+  },
+  "optimization": {
+    "enabled": true,
+    "features": [
+      "build-optimization",
+      "performance-monitoring", 
+      "spatial-optimization",
+      "voice-optimization",
+      "api-optimization",
+      "chat-optimization"
+    ],
+    "targets": {
+      "fps": 60,
+      "memory": "100mb",
+      "loadTime": "2s"
+    }
+  },
+  "webxr": {
+    "supportedDevices": [
+      "oculus-quest",
+      "oculus-rift",
+      "htc-vive",
+      "windows-mr",
+      "mobile-vr"
+    ],
+    "features": [
+      "immersive-vr",
+      "immersive-ar",
+      "inline"
+    ]
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/chichiwattyp2"
+  }
+}
