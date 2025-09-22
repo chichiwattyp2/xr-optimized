@@ -1,0 +1,173 @@
+/* === Lookbook XR Override CSS === */
+
+/* Base variables (dark glass theme) */
+:root {
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Rampart One", sans-serif;
+  --font-alt: "Asimovian", sans-serif;
+
+  --ink: #f5f5f5;
+  --ink-muted: #aaa;
+  --accent: #9ad;
+  --accent-ink: #0b0d12;
+
+  --panel-bg: rgba(16,18,24,.7);
+  --panel-border: rgba(255,255,255,.15);
+  --radius-sm: 12px;
+  --shadow-1: 0 4px 16px rgba(0,0,0,.4);
+}
+
+/* Beige editorial theme */
+body[data-theme="beige-editorial"] {
+  --ink: #222;
+  --ink-muted: #666;
+  --accent: #d25;
+  --accent-ink: #fff;
+
+  --panel-bg: rgba(250, 240, 225, .85);
+  --panel-border: rgba(20,20,20,.15);
+  --shadow-1: 0 2px 8px rgba(0,0,0,.15);
+}
+
+/* Reset + base */
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0b0d12;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Floating content boxes */
+.float-box {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin: 12px;
+  max-width: 300px;
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(10px);
+  color: var(--ink);
+}
+.float-box .title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-bottom: 4px;
+}
+.float-box .subtitle {
+  font-family: var(--font-alt);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  color: var(--ink-muted);
+}
+.float-box .media img {
+  max-width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+/* Chips */
+.chip {
+  display: inline-block;
+  padding: 4px 10px;
+  margin: 2px;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  font-size: 0.8rem;
+  background: color-mix(in hsl, var(--panel-bg) 90%, transparent);
+  color: var(--ink);
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  background: color-mix(in hsl, var(--panel-bg) 95%, transparent);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s ease, transform .1s ease;
+}
+.btn:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Animations */
+.float-anim { animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.reveal-rise { animation: riseIn .6s ease-out both; }
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tilt-hover { transition: transform .2s ease; }
+.tilt-hover:hover { transform: rotate3d(1,1,0,6deg); }
+
+/* Parallax layers */
+.parallax-stage { perspective: 1000px; }
+.parallax-layer { transform-style: preserve-3d; }
+.parallax-d1 { transform: translateZ(30px); }
+.parallax-d2 { transform: translateZ(60px); }
+.parallax-d3 { transform: translateZ(90px); }
+
+/* XR UI container */
+.xr-ui {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  font-family: var(--font-sans);
+}
+.xr-ui > * { pointer-events: auto; }
+
+/* === Overlay Input Bar (bottom fixed UI) === */
+#ui {
+  position: fixed;
+  left: 12px; right: 12px; bottom: 12px;
+  display: flex; gap: 8px; z-index: 1000;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(6px);
+  box-shadow: var(--shadow-1);
+}
+#prompt {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  background: color-mix(in hsl, var(--panel-bg) 80%, transparent);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+#prompt::placeholder { color: var(--ink-muted); }
+#ui button {
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  background: color-mix(in hsl, var(--panel-bg) 95%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+  transition: transform .1s ease, background .2s ease;
+}
+#ui button:hover { background: var(--accent); color: var(--accent-ink); }
+#ui button:active { transform: translateY(1px); }
+
+@media (max-width: 480px) {
+  #ui { flex-direction: column; }
+  #ui button { width: 100%; }
+}
