@@ -22,7 +22,7 @@ class BuildOptimizer {
     console.log("🚀 Starting optimized build...");
     try {
       await this.optimizeHTML();
-      await this.optimizeJavaScript();
+      await this.bundleJavaScript();
       this.copyAPIRoutes();
       this.copyStaticAssets();
       this.generateServiceWorker();
@@ -57,11 +57,23 @@ class BuildOptimizer {
     }
   }
 
-  async optimizeJavaScript() {
+  async bundleJavaScript() {
     console.log("⚡ Bundling JavaScript...");
-    const jsFiles = ["client.js", "index.js", "sheets.js"];
+
+    // Collect optimization scripts first
+    const optimizationsDir = path.join(this.srcDir, "src", "optimizations");
     let bundle = "";
 
+    if (fs.existsSync(optimizationsDir)) {
+      const optFiles = fs.readdirSync(optimizationsDir).filter(f => f.endsWith(".js"));
+      for (const file of optFiles) {
+        const filePath = path.join(optimizationsDir, file);
+        bundle += `\n// ---- optimizations/${file} ----\n` + fs.readFileSync(filePath, "utf8");
+      }
+    }
+
+    // Then collect main app scripts
+    const jsFiles = ["client.js", "index.js", "sheets.js"];
     for (const file of jsFiles) {
       const filePath = path.join(this.srcDir, file);
       if (fs.existsSync(filePath)) {
