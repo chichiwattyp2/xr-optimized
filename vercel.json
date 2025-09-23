@@ -15,8 +15,7 @@
     "api/realtime-token.js": { "maxDuration": 10, "memory": 512 },
     "api/health.js": { "maxDuration": 5, "memory": 128 },
     "api/ai-chat.js": { "maxDuration": 30, "memory": 1024 },
-    "api/vr-assistant.js": { "maxDuration": 30, "memory": 1024 },
-    "api/ping.cjs": { "maxDuration": 5, "memory": 128 }
+    "api/vr-assistant.js": { "maxDuration": 30, "memory": 1024 }
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }
