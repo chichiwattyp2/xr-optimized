@@ -40,7 +40,7 @@ class BuildOptimizer {
     const htmlFiles = fs.readdirSync(this.srcDir).filter(f => f.endsWith(".html"));
 
     for (const file of htmlFiles) {
-      const html = fs.readFileSync(path.join(this.srcDir, file), "utf8");
+      let html = fs.readFileSync(path.join(this.srcDir, file), "utf8");
       const optimized = await htmlMinifier.minify(html, {
         removeComments: true,
         removeRedundantAttributes: true,
@@ -52,7 +52,13 @@ class BuildOptimizer {
         minifyJS: true
       });
 
-      fs.writeFileSync(path.join(this.buildDir, file), optimized);
+      // Inject bundle.min.js before </body>
+      const injected = optimized.replace(
+        /<\/body>/i,
+        `  <script src="/bundle.min.js"></script>\n</body>`
+      );
+
+      fs.writeFileSync(path.join(this.buildDir, file), injected);
       console.log(`   ✔ ${file}`);
     }
   }
