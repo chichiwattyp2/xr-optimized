@@ -28,20 +28,16 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev",
-    "build": "node build.js",
-    "build:production": "NODE_ENV=production node build.js",
-    "build:analyze": "node build.js --analyze",
-    "postbuild": "echo '✔ Build complete. sw.js and bundle.min.js ready.'",
-    "deploy": "npm run build:production && vercel --prod",
-    "deploy:preview": "npm run build && vercel",
-    "test:build": "npm run build && echo 'Build test passed'",
-    "clean": "rm -rf .vercel/ bundle.min.js sw.js",
-    "lint": "echo 'Add your linting tool here'",
-    "format": "echo 'Add your formatting tool here'"
-  },
+ "scripts": {
+  "dev": "vercel dev",
+  "start": "vercel dev",
+  "build": "node build.js",
+  "build:production": "NODE_ENV=production node build.js",
+  "deploy": "npm run build:production && vercel --prod",
+  "deploy:preview": "npm run build && vercel",
+  "clean": "rm -rf dist/ .vercel/ bundle.min.js sw.js"
+}
+
   "dependencies": {
     "aframe": "^1.4.0"
   },
