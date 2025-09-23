@@ -11,24 +11,15 @@
   "installCommand": "npm install",
   "framework": null,
   "functions": {
-    "dist/api/chat.js": {
-      "maxDuration": 30,
-      "memory": 1024
-    },
-    "dist/api/realtime-token.js": {
-      "maxDuration": 10,
-      "memory": 512
-    },
-    "dist/api/health.js": {
-      "maxDuration": 5,
-      "memory": 128
-    }
+    "api/chat.js": { "maxDuration": 30, "memory": 1024 },
+    "api/realtime-token.js": { "maxDuration": 10, "memory": 512 },
+    "api/health.js": { "maxDuration": 5, "memory": 128 },
+    "api/ai-chat.js": { "maxDuration": 30, "memory": 1024 },
+    "api/vr-assistant.js": { "maxDuration": 30, "memory": 1024 },
+    "api/ping.cjs": { "maxDuration": 5, "memory": 128 }
   },
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/dist/api/$1"
-    }
+    { "source": "/api/(.*)", "destination": "/api/$1" }
   ],
   "headers": [
     {
