@@ -81,7 +81,9 @@ class BuildOptimizer {
       return;
     }
 
+    // ✅ Allow modern syntax like #private fields
     const minified = await minify(bundle, {
+      ecma: 2022,
       compress: { dead_code: true, drop_debugger: true },
       mangle: { reserved: ["AFRAME"] },
       format: { comments: false }
