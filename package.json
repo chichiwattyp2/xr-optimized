@@ -36,7 +36,7 @@
   "deploy": "npm run build:production && vercel --prod",
   "deploy:preview": "npm run build && vercel",
   "clean": "rm -rf dist/ .vercel/ bundle.min.js sw.js"
-}
+},
 
   "dependencies": {
     "aframe": "^1.4.0"
