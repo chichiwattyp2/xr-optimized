@@ -1,27 +1,27 @@
 {
   "version": 2,
-  "name": "xr-home-chat",
+  "name": "xr-optimized",
   "build": {
     "env": {
       "NODE_ENV": "production"
     }
   },
-  "buildCommand": "npm run build:production",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm ci",
   "framework": null,
   "functions": {
-    "api/chat.js": {
+    "dist/api/chat.js": {
       "runtime": "nodejs18.x",
       "maxDuration": 30,
       "memory": 1024
     },
-    "api/realtime-token.js": {
-      "runtime": "nodejs18.x", 
+    "dist/api/realtime-token.js": {
+      "runtime": "nodejs18.x",
       "maxDuration": 10,
       "memory": 512
     },
-    "api/health.js": {
+    "dist/api/health.js": {
       "runtime": "nodejs18.x",
       "maxDuration": 5,
       "memory": 128
@@ -30,26 +30,26 @@
   "routes": [
     {
       "src": "/sw\\.js",
-      "dest": "/sw.js",
+      "dest": "/dist/sw.js",
       "headers": {
         "Cache-Control": "public, max-age=0, must-revalidate",
         "Service-Worker-Allowed": "/"
       }
     },
     {
-      "src": "/client\\.min\\.js",
-      "dest": "/client.min.js", 
+      "src": "/bundle\\.min\\.js",
+      "dest": "/dist/bundle.min.js",
       "headers": {
         "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
       "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "dest": "/dist/api/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/dist/$1"
     }
   ],
   "headers": [
@@ -74,7 +74,7 @@
           "value": "DENY"
         },
         {
-          "key": "X-XSS-Protection", 
+          "key": "X-XSS-Protection",
           "value": "1; mode=block"
         },
         {
@@ -95,7 +95,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "destination": "/dist/api/$1"
     }
   ],
   "cleanUrls": true,
