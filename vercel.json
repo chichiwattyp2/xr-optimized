@@ -8,7 +8,7 @@
   },
   "buildCommand": "npm run build",
   "outputDirectory": ".",
-  "installCommand": "npm ci",
+  "installCommand": "npm install",
   "framework": null,
   "functions": {
     "api/chat.js": {
