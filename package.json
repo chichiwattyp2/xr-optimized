@@ -1,7 +1,7 @@
 {
   "name": "xr-optimized",
   "version": "2.0.0",
-  "description": "Production-ready WebXR application with performance optimizations",
+  "description": "Production-ready VR/AR chat application with performance optimizations",
   "main": "client.js",
   "keywords": [
     "vr",
@@ -28,16 +28,15 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-"scripts": {
-  "dev": "vercel dev",
-  "start": "vercel dev",
-  "build": "node js/build.js",
-  "build:production": "NODE_ENV=production node js/build.js",
-  "deploy": "npm run build:production && vercel --prod",
-  "deploy:preview": "npm run build && vercel",
-  "clean": "rm -rf dist/ .vercel/ bundle.min.js sw.js"
-},
-{
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "vercel dev",
+    "build": "node js/build.js",
+    "build:production": "NODE_ENV=production node js/build.js",
+    "deploy": "npm run build:production && vercel --prod",
+    "deploy:preview": "npm run build && vercel",
+    "clean": "rm -rf dist/ .vercel/ bundle.min.js sw.js"
+  },
   "dependencies": {
     "aframe": "^1.4.0",
     "terser": "^5.24.0",
@@ -46,8 +45,7 @@
   },
   "devDependencies": {
     "vercel": "^32.0.0"
-  }
-},
+  },
   "browserslist": [
     "last 2 Chrome versions",
     "last 2 Firefox versions",
