@@ -22,8 +22,7 @@ class BuildOptimizer {
     console.log("🚀 Starting optimized build...");
     try {
       await this.optimizeHTML();
-      await this.bundleJavaScript();
-      this.copyAPIRoutes();
+      await this.bundleOptimizations();
       this.copyStaticAssets();
       this.generateServiceWorker();
 
@@ -63,10 +62,9 @@ class BuildOptimizer {
     }
   }
 
-  async bundleJavaScript() {
-    console.log("⚡ Bundling JavaScript...");
+  async bundleOptimizations() {
+    console.log("⚡ Bundling src/optimizations/*.js ...");
 
-    // Collect optimization scripts first
     const optimizationsDir = path.join(this.srcDir, "src", "optimizations");
     let bundle = "";
 
@@ -78,16 +76,10 @@ class BuildOptimizer {
       }
     }
 
-    // Then collect main app scripts
-    const jsFiles = ["client.js", "index.js", "sheets.js"];
-    for (const file of jsFiles) {
-      const filePath = path.join(this.srcDir, file);
-      if (fs.existsSync(filePath)) {
-        bundle += `\n// ---- ${file} ----\n` + fs.readFileSync(filePath, "utf8");
-      }
+    if (bundle.trim() === "") {
+      console.log("   ⚠ No optimization scripts found.");
+      return;
     }
-
-    if (bundle.trim() === "") return;
 
     const minified = await minify(bundle, {
       compress: { dead_code: true, drop_debugger: true },
@@ -99,18 +91,9 @@ class BuildOptimizer {
     console.log("   ✔ bundle.min.js");
   }
 
-  copyAPIRoutes() {
-    console.log("📁 Copying API routes...");
-    const apiSrc = path.join(this.srcDir, "api");
-    const apiDest = path.join(this.buildDir, "api");
-    if (fs.existsSync(apiSrc)) {
-      this.copyRecursive(apiSrc, apiDest);
-    }
-  }
-
   copyStaticAssets() {
     console.log("🖼️ Copying static assets...");
-    const dirs = ["assets", "css", "gemini-ui", "js", "spotify", "tests"];
+    const dirs = ["assets", "css", "gemini-ui", "spotify", "tests"];
 
     dirs.forEach(dir => {
       const src = path.join(this.srcDir, dir);
