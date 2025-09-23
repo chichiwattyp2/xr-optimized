@@ -81,16 +81,22 @@ class BuildOptimizer {
       return;
     }
 
-    // ✅ Allow modern syntax like #private fields
-    const minified = await minify(bundle, {
-      ecma: 2022,
-      compress: { dead_code: true, drop_debugger: true },
-      mangle: { reserved: ["AFRAME"] },
-      format: { comments: false }
-    });
+    try {
+      // Try minification with modern syntax support
+      const minified = await minify(bundle, {
+        ecma: 2022,
+        compress: { dead_code: true, drop_debugger: true },
+        mangle: { reserved: ["AFRAME"] },
+        format: { comments: false }
+      });
 
-    fs.writeFileSync(path.join(this.buildDir, "bundle.min.js"), minified.code);
-    console.log("   ✔ bundle.min.js");
+      fs.writeFileSync(path.join(this.buildDir, "bundle.min.js"), minified.code);
+      console.log("   ✔ bundle.min.js (minified)");
+    } catch (err) {
+      console.warn("⚠ Terser failed, writing unminified bundle instead:", err.message);
+      fs.writeFileSync(path.join(this.buildDir, "bundle.min.js"), bundle);
+      console.log("   ✔ bundle.min.js (unminified)");
+    }
   }
 
   copyStaticAssets() {
