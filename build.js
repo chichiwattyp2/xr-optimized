@@ -1,36 +1,46 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { minify } = require('terser');
-const CleanCSS = require('clean-css');
-const htmlMinifier = require('html-minifier-terser');
+const fs = require("fs");
+const path = require("path");
+const { minify } = require("terser");
+const htmlMinifier = require("html-minifier-terser");
 
 class BuildOptimizer {
   constructor() {
+    this.srcDir = ".";
+    this.buildDir = "dist";
     this.startTime = Date.now();
+
+    // Reset dist directory
+    if (fs.existsSync(this.buildDir)) {
+      fs.rmSync(this.buildDir, { recursive: true, force: true });
+    }
+    fs.mkdirSync(this.buildDir, { recursive: true });
   }
 
   async build() {
-    console.log('🚀 Starting optimized build...');
+    console.log("🚀 Starting optimized build...");
     try {
       await this.optimizeHTML();
       await this.optimizeJavaScript();
-      await this.generateServiceWorker();
+      this.copyAPIRoutes();
+      this.copyStaticAssets();
+      this.generateServiceWorker();
+
       const buildTime = (Date.now() - this.startTime) / 1000;
       console.log(`✅ Build completed in ${buildTime}s`);
     } catch (err) {
-      console.error('❌ Build failed:', err);
+      console.error("❌ Build failed:", err);
       process.exit(1);
     }
   }
 
   async optimizeHTML() {
-    console.log('📝 Optimizing HTML files...');
-    const htmlFiles = fs.readdirSync('.').filter(f => f.endsWith('.html'));
+    console.log("📝 Optimizing HTML files...");
+    const htmlFiles = fs.readdirSync(this.srcDir).filter(f => f.endsWith(".html"));
 
     for (const file of htmlFiles) {
-      const html = fs.readFileSync(file, 'utf8');
+      const html = fs.readFileSync(path.join(this.srcDir, file), "utf8");
       const optimized = await htmlMinifier.minify(html, {
         removeComments: true,
         removeRedundantAttributes: true,
@@ -42,34 +52,67 @@ class BuildOptimizer {
         minifyJS: true
       });
 
-      fs.writeFileSync(file, optimized);
-      console.log(`   ✔ Minified ${file}`);
+      fs.writeFileSync(path.join(this.buildDir, file), optimized);
+      console.log(`   ✔ ${file}`);
     }
   }
 
   async optimizeJavaScript() {
-    console.log('⚡ Bundling and minifying JavaScript...');
-    const jsFiles = ['client.js', 'index.js', 'sheets.js'];
-    let bundle = '';
+    console.log("⚡ Bundling JavaScript...");
+    const jsFiles = ["client.js", "index.js", "sheets.js"];
+    let bundle = "";
 
     for (const file of jsFiles) {
-      if (fs.existsSync(file)) {
-        bundle += `\n// ---- ${file} ----\n` + fs.readFileSync(file, 'utf8');
+      const filePath = path.join(this.srcDir, file);
+      if (fs.existsSync(filePath)) {
+        bundle += `\n// ---- ${file} ----\n` + fs.readFileSync(filePath, "utf8");
       }
     }
 
+    if (bundle.trim() === "") return;
+
     const minified = await minify(bundle, {
       compress: { dead_code: true, drop_debugger: true },
-      mangle: { reserved: ['AFRAME'] },
+      mangle: { reserved: ["AFRAME"] },
       format: { comments: false }
     });
 
-    fs.writeFileSync('bundle.min.js', minified.code);
-    console.log('   ✔ Created bundle.min.js');
+    fs.writeFileSync(path.join(this.buildDir, "bundle.min.js"), minified.code);
+    console.log("   ✔ bundle.min.js");
   }
 
-  async generateServiceWorker() {
-    console.log('⚙️ Generating Service Worker...');
+  copyAPIRoutes() {
+    console.log("📁 Copying API routes...");
+    const apiSrc = path.join(this.srcDir, "api");
+    const apiDest = path.join(this.buildDir, "api");
+    if (fs.existsSync(apiSrc)) {
+      this.copyRecursive(apiSrc, apiDest);
+    }
+  }
+
+  copyStaticAssets() {
+    console.log("🖼️ Copying static assets...");
+    const dirs = ["assets", "css", "gemini-ui", "js", "spotify", "tests"];
+
+    dirs.forEach(dir => {
+      const src = path.join(this.srcDir, dir);
+      if (fs.existsSync(src)) {
+        this.copyRecursive(src, path.join(this.buildDir, dir));
+      }
+    });
+
+    // Copy favicon and misc root files
+    const miscFiles = ["favicon.ico", "lookbook-xr-override.css"];
+    miscFiles.forEach(file => {
+      const src = path.join(this.srcDir, file);
+      if (fs.existsSync(src)) {
+        fs.copyFileSync(src, path.join(this.buildDir, file));
+      }
+    });
+  }
+
+  generateServiceWorker() {
+    console.log("⚙️ Generating service worker...");
     const sw = `
 const CACHE_NAME = 'xr-optimized-v1';
 const urlsToCache = [
@@ -85,12 +128,23 @@ self.addEventListener('fetch', e => {
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(names =>
-    Promise.all(names.map(n => n !== CACHE_NAME && caches.delete(n)))
+  e.waitUntil(caches.keys().then(keys =>
+    Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))
   ));
 });`;
-    fs.writeFileSync('sw.js', sw);
-    console.log('   ✔ sw.js created');
+    fs.writeFileSync(path.join(this.buildDir, "sw.js"), sw);
+  }
+
+  copyRecursive(src, dest) {
+    const stats = fs.statSync(src);
+    if (stats.isDirectory()) {
+      fs.mkdirSync(dest, { recursive: true });
+      fs.readdirSync(src).forEach(child =>
+        this.copyRecursive(path.join(src, child), path.join(dest, child))
+      );
+    } else {
+      fs.copyFileSync(src, dest);
+    }
   }
 }
 
