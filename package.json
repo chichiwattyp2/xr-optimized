@@ -1,3 +1,33 @@
+{
+  "name": "xr-optimized",
+  "version": "2.0.0",
+  "description": "Production-ready WebXR application with performance optimizations",
+  "main": "client.js",
+  "keywords": [
+    "vr",
+    "ar",
+    "webxr",
+    "aframe",
+    "openai",
+    "chat",
+    "voice",
+    "performance",
+    "optimization"
+  ],
+  "author": "chichiwattyp2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chichiwattyp2/xr-optimized.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chichiwattyp2/xr-optimized/issues"
+  },
+  "homepage": "https://github.com/chichiwattyp2/xr-optimized#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
 "scripts": {
   "dev": "vercel dev",
   "start": "vercel dev",
@@ -6,4 +36,25 @@
   "deploy": "npm run build:production && vercel --prod",
   "deploy:preview": "npm run build && vercel",
   "clean": "rm -rf dist/ .vercel/ bundle.min.js sw.js"
+},
+
+  "dependencies": {
+    "aframe": "^1.4.0"
+  },
+  "devDependencies": {
+    "terser": "^5.24.0",
+    "clean-css": "^5.3.2",
+    "html-minifier-terser": "^7.2.0",
+    "vercel": "^32.0.0"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "volta": {
+    "node": "18.18.0",
+    "npm": "9.8.1"
+  }
 }
