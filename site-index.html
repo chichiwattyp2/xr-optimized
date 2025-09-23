@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Index - XR Home Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <style>
+        /* Material Design 3 Design Tokens */
+        :root {
+            /* Primary colors - Nature green theme */
+            --md-sys-color-primary: #407028;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #B8F397;
+            --md-sys-color-on-primary-container: #0C2000;
+            
+            /* Secondary colors - Sage green */
+            --md-sys-color-secondary: #586258;
+            --md-sys-color-on-secondary: #FFFFFF;
+            --md-sys-color-secondary-container: #DCE6D9;
+            --md-sys-color-on-secondary-container: #161E16;
+            
+            /* Tertiary colors - Teal accent */
+            --md-sys-color-tertiary: #2A6478;
+            --md-sys-color-tertiary-container: #A8EDFF;
+            --md-sys-color-on-tertiary-container: #001F28;
+            
+            /* Error colors */
+            --md-sys-color-error: #BA1A1A;
+            --md-sys-color-on-error: #FFFFFF;
+            --md-sys-color-error-container: #FFDAD6;
+            --md-sys-color-on-error-container: #410002;
+            
+            /* Surface colors - Light theme */
+            --md-sys-color-surface-dim: #D8DBD5;
+            --md-sys-color-surface: #F7FAF4;
+            --md-sys-color-surface-bright: #F7FAF4;
+            --md-sys-color-surface-container-lowest: #FFFFFF;
+            --md-sys-color-surface-container-low: #F1F4EE;
+            --md-sys-color-surface-container: #EBEFE9;
+            --md-sys-color-surface-container-high: #E6E9E3;
+            --md-sys-color-surface-container-highest: #E0E3DD;
+            
+            /* Background and outline */
+            --md-sys-color-background: #F7FAF4;
+            --md-sys-color-on-background: #191D18;
+            --md-sys-color-surface-variant: #E0E4DB;
+            --md-sys-color-on-surface-variant: #434940;
+            --md-sys-color-outline: #747970;
+            --md-sys-color-outline-variant: #C4C8BF;
+            --md-sys-color-on-surface: #191D18;
+            
+            /* Elevation */
+            --md-sys-elevation-1: 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+            --md-sys-elevation-2: 0 1px 2px rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+            --md-sys-elevation-3: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+            
+            /* Typography */
+            --md-sys-typescale-display-large: 57px;
+            --md-sys-typescale-display-medium: 45px;
+            --md-sys-typescale-display-small: 36px;
+            --md-sys-typescale-headline-large: 32px;
+            --md-sys-typescale-headline-medium: 28px;
+            --md-sys-typescale-headline-small: 24px;
+            --md-sys-typescale-title-large: 22px;
+            --md-sys-typescale-title-medium: 16px;
+            --md-sys-typescale-body-large: 16px;
+            --md-sys-typescale-body-medium: 14px;
+            --md-sys-typescale-label-large: 14px;
+            
+            /* Motion */
+            --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+            --md-sys-motion-duration-short: 150ms;
+            --md-sys-motion-duration-medium: 300ms;
+        }
+        
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --md-sys-color-primary: #9DD678;
+                --md-sys-color-on-primary: #1B3700;
+                --md-sys-color-primary-container: #2A5010;
+                --md-sys-color-on-primary-container: #B8F397;
+                
+                --md-sys-color-secondary: #BFCBB8;
+                --md-sys-color-on-secondary: #2A332A;
+                --md-sys-color-secondary-container: #404940;
+                --md-sys-color-on-secondary-container: #DCE6D9;
+                
+                --md-sys-color-tertiary: #8CD0E3;
+                --md-sys-color-on-tertiary: #003543;
+                --md-sys-color-tertiary-container: #004E5F;
+                --md-sys-color-on-tertiary-container: #A8EDFF;
+                
+                --md-sys-color-error: #FFB4AB;
+                --md-sys-color-on-error: #690005;
+                --md-sys-color-error-container: #93000A;
+                --md-sys-color-on-error-container: #FFDAD6;
+                
+                --md-sys-color-surface-dim: #111412;
+                --md-sys-color-surface: #111412;
+                --md-sys-color-surface-bright: #373A36;
+                --md-sys-color-surface-container-lowest: #0C0F0D;
+                --md-sys-color-surface-container-low: #191D18;
+                --md-sys-color-surface-container: #1D211C;
+                --md-sys-color-surface-container-high: #282B27;
+                --md-sys-color-surface-container-highest: #333632;
+                
+                --md-sys-color-background: #111412;
+                --md-sys-color-on-background: #E0E3DD;
+                --md-sys-color-surface-variant: #434940;
+                --md-sys-color-on-surface-variant: #C4C8BF;
+                --md-sys-color-outline: #8E9389;
+                --md-sys-color-outline-variant: #434940;
+                --md-sys-color-on-surface: #E0E3DD;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 48px 0 64px;
+            background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-surface) 100%);
+            margin: -24px -24px 48px -24px;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .logo-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon .material-symbols-rounded {
+            font-size: 36px;
+        }
+        
+        h1 {
+            font-size: var(--md-sys-typescale-display-medium);
+            color: var(--md-sys-color-on-background);
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            font-size: var(--md-sys-typescale-body-large);
+            color: var(--md-sys-color-on-background);
+            opacity: 0.8;
+        }
+        
+        /* Search Bar */
+        .search-container {
+            max-width: 600px;
+            margin: -32px auto 48px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .search-bar {
+            width: 100%;
+            background: var(--md-sys-color-surface);
+            border-radius: 28px;
+            box-shadow: var(--md-sys-elevation-2);
+            display: flex;
+            align-items: center;
+            padding: 4px 4px 4px 24px;
+            transition: box-shadow var(--md-sys-motion-duration-short);
+        }
+        
+        .search-bar:focus-within {
+            box-shadow: var(--md-sys-elevation-3);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            font-family: inherit;
+            font-size: var(--md-sys-typescale-body-large);
+            color: var(--md-sys-color-on-surface);
+            outline: none;
+            padding: 12px 0;
+        }
+        
+        .search-input::placeholder {
+            color: var(--md-sys-color-on-surface-variant);
+            opacity: 0.6;
+        }
+        
+        .search-button {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border: none;
+            border-radius: 24px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--md-sys-motion-duration-short);
+        }
+        
+        .search-button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Quick Stats */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+        
+        .stat-card {
+            background: var(--md-sys-color-surface-container);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: var(--md-sys-typescale-headline-large);
+            color: var(--md-sys-color-primary);
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: var(--md-sys-typescale-body-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: 4px;
+        }
+        
+        /* Index Grid */
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+        
+        /* Category Section */
+        .category-section {
+            background: var(--md-sys-color-surface);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--md-sys-elevation-1);
+            transition: all var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
+        }
+        
+        .category-section:hover {
+            box-shadow: var(--md-sys-elevation-3);
+            transform: translateY(-4px);
+        }
+        
+        .category-header {
+            background: var(--md-sys-color-surface-container);
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+        }
+        
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .category-title {
+            flex: 1;
+        }
+        
+        .category-title h2 {
+            font-size: var(--md-sys-typescale-title-large);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 2px;
+        }
+        
+        .category-count {
+            font-size: var(--md-sys-typescale-body-medium);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        .category-badge {
+            background: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: var(--md-sys-typescale-label-large);
+            font-weight: 500;
+        }
+        
+        .category-links {
+            padding: 12px;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--md-sys-color-on-surface);
+            transition: all var(--md-sys-motion-duration-short);
+        }
+        
+        .link-item:hover {
+            background: var(--md-sys-color-surface-container-high);
+        }
+        
+        .link-icon {
+            width: 24px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        .link-content {
+            flex: 1;
+        }
+        
+        .link-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .link-description {
+            font-size: var(--md-sys-typescale-body-medium);
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        .link-status {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-live {
+            background: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+        }
+        
+        .status-beta {
+            background: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+        }
+        
+        .status-coming {
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+        
+        .status-external {
+            background: var(--md-sys-color-surface-container-highest);
+            color: var(--md-sys-color-on-surface);
+        }
+        
+        /* Featured Section */
+        .featured-section {
+            background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-tertiary-container) 100%);
+            border-radius: 28px;
+            padding: 48px;
+            margin-bottom: 48px;
+            text-align: center;
+        }
+        
+        .featured-title {
+            font-size: var(--md-sys-typescale-headline-large);
+            color: var(--md-sys-color-on-primary-container);
+            margin-bottom: 16px;
+        }
+        
+        .featured-description {
+            font-size: var(--md-sys-typescale-body-large);
+            color: var(--md-sys-color-on-primary-container);
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .featured-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .md-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 100px;
+            font-family: inherit;
+            font-size: var(--md-sys-typescale-label-large);
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--md-sys-motion-duration-short);
+        }
+        
+        .md-button-filled {
+            background: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--md-sys-elevation-1);
+        }
+        
+        .md-button-filled:hover {
+            box-shadow: var(--md-sys-elevation-2);
+            transform: translateY(-2px);
+        }
+        
+        .md-button-tonal {
+            background: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+        
+        .md-button-tonal:hover {
+            box-shadow: var(--md-sys-elevation-1);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+            font-size: var(--md-sys-typescale-body-medium);
+        }
+        
+        .breadcrumb a {
+            color: var(--md-sys-color-on-surface-variant);
+            text-decoration: none;
+            transition: color var(--md-sys-motion-duration-short);
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--md-sys-color-primary);
+        }
+        
+        .breadcrumb-separator {
+            color: var(--md-sys-color-outline);
+        }
+        
+        .breadcrumb-current {
+            color: var(--md-sys-color-primary);
+            font-weight: 500;
+        }
+        
+        /* Tree View */
+        .tree-view {
+            background: var(--md-sys-color-surface);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 48px;
+        }
+        
+        .tree-title {
+            font-size: var(--md-sys-typescale-headline-small);
+            margin-bottom: 20px;
+            color: var(--md-sys-color-on-surface);
+        }
+        
+        .tree-list {
+            list-style: none;
+        }
+        
+        .tree-item {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .tree-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 16px;
+            height: 1px;
+            background: var(--md-sys-color-outline-variant);
+        }
+        
+        .tree-item.has-children::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            bottom: -8px;
+            width: 1px;
+            background: var(--md-sys-color-outline-variant);
+        }
+        
+        .tree-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--md-sys-color-on-surface);
+            text-decoration: none;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all var(--md-sys-motion-duration-short);
+        }
+        
+        .tree-link:hover {
+            background: var(--md-sys-color-surface-container);
+            color: var(--md-sys-color-primary);
+        }
+        
+        .tree-children {
+            margin-top: 8px;
+            margin-left: 16px;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--md-sys-color-surface-container-highest);
+            margin: 0 -24px -24px -24px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        
+        .footer-links a {
+            color: var(--md-sys-color-on-surface-variant);
+            text-decoration: none;
+            transition: color var(--md-sys-motion-duration-short);
+        }
+        
+        .footer-links a:hover {
+            color: var(--md-sys-color-primary);
+        }
+        
+        .footer-text {
+            font-size: var(--md-sys-typescale-body-medium);
+            color: var(--md-sys-color-on-surface-variant);
+            opacity: 0.8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .header {
+                padding: 32px 16px 48px;
+                margin: -16px -16px 32px -16px;
+            }
+            
+            h1 {
+                font-size: var(--md-sys-typescale-display-small);
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .index-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-section {
+                padding: 32px 24px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+        
+        /* Loading skeleton */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .skeleton {
+            background: linear-gradient(90deg, 
+                var(--md-sys-color-surface-container) 0%, 
+                var(--md-sys-color-surface-container-high) 50%, 
+                var(--md-sys-color-surface-container) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-large">
+                    <div class="logo-icon">
+                        <span class="material-symbols-rounded">view_in_ar</span>
+                    </div>
+                </div>
+                <h1>XR Home Chat Site Index</h1>
+                <p class="subtitle">Complete directory of all pages, documentation, and resources</p>
+            </div>
+        </header>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search pages, docs, or resources..." id="searchInput">
+                <button class="search-button" onclick="searchPages()">
+                    <span class="material-symbols-rounded">search</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/">Home</a>
+            <span class="breadcrumb-separator material-symbols-rounded">chevron_right</span>
+            <span class="breadcrumb-current">Site Index</span>
+        </nav>
+        
+        <!-- Quick Stats -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Total Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Examples</div>
+            </div>
+        </div>
+        
+        <!-- Featured Section -->
+        <div class="featured-section">
+            <h2 class="featured-title">Quick Start</h2>
+            <p class="featured-description">Get started with XR Home Chat in minutes. Access the live demo or dive into the documentation.</p>
+            <div class="featured-buttons">
+                <a href="/app" class="md-button md-button-filled">
+                    <span class="material-symbols-rounded">play_arrow</span>
+                    Launch XR Chat
+                </a>
+                <a href="/docs/getting-started" class="md-button md-button-tonal">
+                    <span class="material-symbols-rounded">book</span>
+                    Documentation
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Index Grid -->
+        <div class="index-grid">
+            <!-- Core Pages -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">home</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>Core Pages</h2>
+                        <span class="category-count">5 pages</span>
+                    </div>
+                    <span class="category-badge">Essential</span>
+                </div>
+                <div class="category-links">
+                    <a href="/" class="link-item">
+                        <span class="link-icon material-symbols-rounded">language</span>
+                        <div class="link-content">
+                            <div class="link-title">Landing Page</div>
+                            <div class="link-description">Main marketing page</div>
+                        </div>
+                        <span class="link-status status-live">Live</span>
+                    </a>
+                    <a href="/app" class="link-item">
+                        <span class="link-icon material-symbols-rounded">view_in_ar</span>
+                        <div class="link-content">
+                            <div class="link-title">XR Chat App</div>
+                            <div class="link-description">Main VR/AR application</div>
+                        </div>
+                        <span class="link-status status-live">Live</span>
+                    </a>
+                    <a href="/demo" class="link-item">
+                        <span class="link-icon material-symbols-rounded">smart_display</span>
+                        <div class="link-content">
+                            <div class="link-title">Live Demo</div>
+                            <div class="link-description">Try without setup</div>
+                        </div>
+                        <span class="link-status status-beta">Beta</span>
+                    </a>
+                    <a href="/about" class="link-item">
+                        <span class="link-icon material-symbols-rounded">info</span>
+                        <div class="link-content">
+                            <div class="link-title">About</div>
+                            <div class="link-description">Project information</div>
+                        </div>
+                        <span class="link-status status-live">Live</span>
+                    </a>
+                    <a href="/sitemap" class="link-item">
+                        <span class="link-icon material-symbols-rounded">account_tree</span>
+                        <div class="link-content">
+                            <div class="link-title">Site Index</div>
+                            <div class="link-description">This page</div>
+                        </div>
+                        <span class="link-status status-live">Live</span>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Documentation -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">description</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>Documentation</h2>
+                        <span class="category-count">8 pages</span>
+                    </div>
+                </div>
+                <div class="category-links">
+                    <a href="/docs" class="link-item">
+                        <span class="link-icon material-symbols-rounded">book</span>
+                        <div class="link-content">
+                            <div class="link-title">Docs Home</div>
+                            <div class="link-description">Documentation overview</div>
+                        </div>
+                    </a>
+                    <a href="/docs/getting-started" class="link-item">
+                        <span class="link-icon material-symbols-rounded">rocket_launch</span>
+                        <div class="link-content">
+                            <div class="link-title">Getting Started</div>
+                            <div class="link-description">Quick start guide</div>
+                        </div>
+                    </a>
+                    <a href="/docs/installation" class="link-item">
+                        <span class="link-icon material-symbols-rounded">download</span>
+                        <div class="link-content">
+                            <div class="link-title">Installation</div>
+                            <div class="link-description">Setup instructions</div>
+                        </div>
+                    </a>
+                    <a href="/docs/configuration" class="link-item">
+                        <span class="link-icon material-symbols-rounded">settings</span>
+                        <div class="link-content">
+                            <div class="link-title">Configuration</div>
+                            <div class="link-description">Config options</div>
+                        </div>
+                    </a>
+                    <a href="/docs/deployment" class="link-item">
+                        <span class="link-icon material-symbols-rounded">cloud_upload</span>
+                        <div class="link-content">
+                            <div class="link-title">Deployment</div>
+                            <div class="link-description">Deploy to production</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- API Reference -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">api</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>API Reference</h2>
+                        <span class="category-count">6 endpoints</span>
+                    </div>
+                </div>
+                <div class="category-links">
+                    <a href="/api" class="link-item">
+                        <span class="link-icon material-symbols-rounded">hub</span>
+                        <div class="link-content">
+                            <div class="link-title">API Overview</div>
+                            <div class="link-description">REST API documentation</div>
+                        </div>
+                    </a>
+                    <a href="/api/chat" class="link-item">
+                        <span class="link-icon material-symbols-rounded">chat</span>
+                        <div class="link-content">
+                            <div class="link-title">/api/chat</div>
+                            <div class="link-description">Chat completions</div>
+                        </div>
+                    </a>
+                    <a href="/api/voice" class="link-item">
+                        <span class="link-icon material-symbols-rounded">mic</span>
+                        <div class="link-content">
+                            <div class="link-title">/api/voice</div>
+                            <div class="link-description">Voice streaming</div>
+                        </div>
+                    </a>
+                    <a href="/api/realtime" class="link-item">
+                        <span class="link-icon material-symbols-rounded">stream</span>
+                        <div class="link-content">
+                            <div class="link-title">/api/realtime</div>
+                            <div class="link-description">WebRTC connection</div>
+                        </div>
+                    </a>
+                    <a href="/api/auth" class="link-item">
+                        <span class="link-icon material-symbols-rounded">lock</span>
+                        <div class="link-content">
+                            <div class="link-title">/api/auth</div>
+                            <div class="link-description">Authentication</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Examples -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">code</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>Examples</h2>
+                        <span class="category-count">8 demos</span>
+                    </div>
+                </div>
+                <div class="category-links">
+                    <a href="/examples" class="link-item">
+                        <span class="link-icon material-symbols-rounded">folder</span>
+                        <div class="link-content">
+                            <div class="link-title">All Examples</div>
+                            <div class="link-description">Browse all demos</div>
+                        </div>
+                    </a>
+                    <a href="/examples/basic-chat" class="link-item">
+                        <span class="link-icon material-symbols-rounded">chat_bubble</span>
+                        <div class="link-content">
+                            <div class="link-title">Basic Chat</div>
+                            <div class="link-description">Simple text chat</div>
+                        </div>
+                    </a>
+                    <a href="/examples/voice-assistant" class="link-item">
+                        <span class="link-icon material-symbols-rounded">assistant</span>
+                        <div class="link-content">
+                            <div class="link-title">Voice Assistant</div>
+                            <div class="link-description">Voice-enabled AI</div>
+                        </div>
+                    </a>
+                    <a href="/examples/multiplayer" class="link-item">
+                        <span class="link-icon material-symbols-rounded">groups</span>
+                        <div class="link-content">
+                            <div class="link-title">Multiplayer</div>
+                            <div class="link-description">Multi-user spaces</div>
+                        </div>
+                    </a>
+                    <a href="/examples/custom-environment" class="link-item">
+                        <span class="link-icon material-symbols-rounded">landscape</span>
+                        <div class="link-content">
+                            <div class="link-title">Custom Environment</div>
+                            <div class="link-description">Custom 3D worlds</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Resources -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">folder_special</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>Resources</h2>
+                        <span class="category-count">7 resources</span>
+                    </div>
+                </div>
+                <div class="category-links">
+                    <a href="https://github.com/chichiwattyp2/xr-home-chat" class="link-item">
+                        <span class="link-icon material-symbols-rounded">code</span>
+                        <div class="link-content">
+                            <div class="link-title">GitHub Repository</div>
+                            <div class="link-description">Source code</div>
+                        </div>
+                        <span class="link-status status-external">External</span>
+                    </a>
+                    <a href="/changelog" class="link-item">
+                        <span class="link-icon material-symbols-rounded">history</span>
+                        <div class="link-content">
+                            <div class="link-title">Changelog</div>
+                            <div class="link-description">Version history</div>
+                        </div>
+                    </a>
+                    <a href="/roadmap" class="link-item">
+                        <span class="link-icon material-symbols-rounded">map</span>
+                        <div class="link-content">
+                            <div class="link-title">Roadmap</div>
+                            <div class="link-description">Future plans</div>
+                        </div>
+                    </a>
+                    <a href="/blog" class="link-item">
+                        <span class="link-icon material-symbols-rounded">article</span>
+                        <div class="link-content">
+                            <div class="link-title">Blog</div>
+                            <div class="link-description">Updates & tutorials</div>
+                        </div>
+                        <span class="link-status status-coming">Coming</span>
+                    </a>
+                    <a href="/community" class="link-item">
+                        <span class="link-icon material-symbols-rounded">forum</span>
+                        <div class="link-content">
+                            <div class="link-title">Community</div>
+                            <div class="link-description">Discord & forums</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Legal -->
+            <section class="category-section">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-rounded">gavel</span>
+                    </div>
+                    <div class="category-title">
+                        <h2>Legal</h2>
+                        <span class="category-count">4 pages</span>
+                    </div>
+                </div>
+                <div class="category-links">
+                    <a href="/privacy" class="link-item">
+                        <span class="link-icon material-symbols-rounded">privacy_tip</span>
+                        <div class="link-content">
+                            <div class="link-title">Privacy Policy</div>
+                            <div class="link-description">Data handling</div>
+                        </div>
+                    </a>
+                    <a href="/terms" class="link-item">
+                        <span class="link-icon material-symbols-rounded">description</span>
+                        <div class="link-content">
+                            <div class="link-title">Terms of Service</div>
+                            <div class="link-description">Usage terms</div>
+                        </div>
+                    </a>
+                    <a href="/license" class="link-item">
+                        <span class="link-icon material-symbols-rounded">badge</span>
+                        <div class="link-content">
+                            <div class="link-title">License</div>
+                            <div class="link-description">MIT License</div>
+                        </div>
+                    </a>
+                    <a href="/security" class="link-item">
+                        <span class="link-icon material-symbols-rounded">security</span>
+                        <div class="link-content">
+                            <div class="link-title">Security</div>
+                            <div class="link-description">Security policy</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Tree View -->
+        <div class="tree-view">
+            <h3 class="tree-title">Site Structure</h3>
+            <ul class="tree-list">
+                <li class="tree-item has-children">
+                    <a href="/" class="tree-link">
+                        <span class="material-symbols-rounded">home</span>
+                        Home
+                    </a>
+                    <ul class="tree-children tree-list">
+                        <li class="tree-item">
+                            <a href="/app" class="tree-link">
+                                <span class="material-symbols-rounded">view_in_ar</span>
+                                XR Chat App
+                            </a>
+                        </li>
+                        <li class="tree-item">
+                            <a href="/demo" class="tree-link">
+                                <span class="material-symbols-rounded">smart_display</span>
+                                Live Demo
+                            </a>
+                        </li>
+                        <li class="tree-item has-children">
+                            <a href="/docs" class="tree-link">
+                                <span class="material-symbols-rounded">book</span>
+                                Documentation
+                            </a>
+                            <ul class="tree-children tree-list">
+                                <li class="tree-item">
+                                    <a href="/docs/getting-started" class="tree-link">Getting Started</a>
+                                </li>
+                                <li class="tree-item">
+                                    <a href="/docs/installation" class="tree-link">Installation</a>
+                                </li>
+                                <li class="tree-item">
+                                    <a href="/docs/configuration" class="tree-link">Configuration</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="tree-item has-children">
+                            <a href="/api" class="tree-link">
+                                <span class="material-symbols-rounded">api</span>
+                                API Reference
+                            </a>
+                            <ul class="tree-children tree-list">
+                                <li class="tree-item">
+                                    <a href="/api/chat" class="tree-link">Chat API</a>
+                                </li>
+                                <li class="tree-item">
+                                    <a href="/api/voice" class="tree-link">Voice API</a>
+                                </li>
+                                <li class="tree-item">
+                                    <a href="/api/realtime" class="tree-link">Realtime API</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="tree-item">
+                            <a href="/examples" class="tree-link">
+                                <span class="material-symbols-rounded">code</span>
+                                Examples
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/docs">Documentation</a>
+                <a href="/api">API</a>
+                <a href="https://github.com/chichiwattyp2/xr-home-chat">GitHub</a>
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+            </div>
+            <div class="footer-text">
+                © 2024 XR Home Chat. Open source under MIT License.
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Search functionality
+        function searchPages() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const allLinks = document.querySelectorAll('.link-item');
+            
+            allLinks.forEach(link => {
+                const title = link.querySelector('.link-title').textContent.toLowerCase();
+                const description = link.querySelector('.link-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    link.style.display = 'flex';
+                } else {
+                    link.style.display = 'none';
+                }
+            });
+            
+            // Show/hide empty categories
+            document.querySelectorAll('.category-section').forEach(section => {
+                const visibleLinks = section.querySelectorAll('.link-item:not([style*="display: none"])');
+                if (visibleLinks.length === 0) {
+                    section.style.opacity = '0.5';
+                } else {
+                    section.style.opacity = '1';
+                }
+            });
+        }
+        
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', searchPages);
+        
+        // Keyboard shortcut for search (Ctrl+K or Cmd+K)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+        
+        // Add hover effect to cards
+        document.querySelectorAll('.category-section').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.stat-number');
+                    const finalValue = parseInt(number.textContent);
+                    let currentValue = 0;
+                    const increment = finalValue / 30;
+                    
+                    const counter = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            number.textContent = finalValue;
+                            clearInterval(counter);
+                        } else {
+                            number.textContent = Math.floor(currentValue);
+                        }
+                    }, 50);
+                    
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.stat-card').forEach(card => {
+            observer.observe(card);
+        });
+        
+        // Console message
+        console.log('%c🌿 XR Home Chat Site Index', 'font-size: 20px; font-weight: bold; color: #407028;');
+        console.log('%c📍 Navigate through all available pages and resources', 'font-size: 14px; color: #586258;');
+    </script>
+</body>
+</html>
