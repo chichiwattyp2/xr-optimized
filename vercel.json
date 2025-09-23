@@ -12,17 +12,14 @@
   "framework": null,
   "functions": {
     "api/chat.js": {
-      "runtime": "nodejs18.x",
       "maxDuration": 30,
       "memory": 1024
     },
     "api/realtime-token.js": {
-      "runtime": "nodejs18.x",
       "maxDuration": 10,
       "memory": 512
     },
     "api/health.js": {
-      "runtime": "nodejs18.x",
       "maxDuration": 5,
       "memory": 128
     }
