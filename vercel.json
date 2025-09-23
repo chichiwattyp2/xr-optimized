@@ -7,21 +7,21 @@
     }
   },
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
+  "outputDirectory": ".",
   "installCommand": "npm ci",
   "framework": null,
   "functions": {
-    "dist/api/chat.js": {
+    "api/chat.js": {
       "runtime": "nodejs18.x",
       "maxDuration": 30,
       "memory": 1024
     },
-    "dist/api/realtime-token.js": {
+    "api/realtime-token.js": {
       "runtime": "nodejs18.x",
       "maxDuration": 10,
       "memory": 512
     },
-    "dist/api/health.js": {
+    "api/health.js": {
       "runtime": "nodejs18.x",
       "maxDuration": 5,
       "memory": 128
@@ -30,10 +30,9 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/dist/api/$1"
+      "destination": "/api/$1"
     }
   ],
-  "redirects": [],
   "headers": [
     {
       "source": "/sw.js",
