@@ -1,156 +1,63 @@
-#!/usr/bin/env node
+// js/build.js
+import fs from "fs";
+import path from "path";
+import { minify } from "terser";
+import { minify as minifyHtml } from "html-minifier-terser";
 
-const fs = require("fs");
-const path = require("path");
-const { minify } = require("terser");
-const htmlMinifier = require("html-minifier-terser");
+const rootDir = process.cwd();
+const distDir = path.join(rootDir, "dist");
+const jsSrcDir = path.join(rootDir, "src", "optimizations");
+const jsDistDir = path.join(distDir, "js");
 
-class BuildOptimizer {
-  constructor() {
-    this.srcDir = ".";
-    this.buildDir = "dist";
-    this.startTime = Date.now();
+// ensure dist and js folder exist
+fs.mkdirSync(jsDistDir, { recursive: true });
 
-    // Reset dist directory
-    if (fs.existsSync(this.buildDir)) {
-      fs.rmSync(this.buildDir, { recursive: true, force: true });
-    }
-    fs.mkdirSync(this.buildDir, { recursive: true });
-  }
+console.log("🚀 Starting optimized build...");
 
-  async build() {
-    console.log("🚀 Starting optimized build...");
-    try {
-      await this.optimizeHTML();
-      await this.bundleOptimizations();
-      this.copyStaticAssets();
-      this.generateServiceWorker();
+// === HTML OPTIMIZATION ===
+console.log("📝 Optimizing HTML files...");
+const htmlFiles = fs
+  .readdirSync(rootDir)
+  .filter(f => f.endsWith(".html"));
 
-      const buildTime = (Date.now() - this.startTime) / 1000;
-      console.log(`✅ Build completed in ${buildTime}s`);
-    } catch (err) {
-      console.error("❌ Build failed:", err);
-      process.exit(1);
-    }
-  }
+for (const file of htmlFiles) {
+  const inputPath = path.join(rootDir, file);
+  const outputPath = path.join(distDir, file);
 
-  async optimizeHTML() {
-    console.log("📝 Optimizing HTML files...");
-    const htmlFiles = fs.readdirSync(this.srcDir).filter(f => f.endsWith(".html"));
+  const html = fs.readFileSync(inputPath, "utf-8");
+  const minifiedHtml = await minifyHtml(html, {
+    collapseWhitespace: true,
+    removeComments: true,
+    minifyJS: true,
+    minifyCSS: true
+  });
 
-    for (const file of htmlFiles) {
-      let html = fs.readFileSync(path.join(this.srcDir, file), "utf8");
-      const optimized = await htmlMinifier.minify(html, {
-        removeComments: true,
-        removeRedundantAttributes: true,
-        removeScriptTypeAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        useShortDoctype: true,
-        collapseWhitespace: true,
-        minifyCSS: true,
-        minifyJS: true
-      });
+  fs.writeFileSync(outputPath, minifiedHtml, "utf-8");
+  console.log(`   ✔ ${file}`);
+}
 
-      // Inject bundle.min.js before </body>
-      const injected = optimized.replace(
-        /<\/body>/i,
-        `  <script src="/bundle.min.js"></script>\n</body>`
-      );
+// === JS OPTIMIZATION ===
+console.log("⚡ Minifying JS files individually...");
 
-      fs.writeFileSync(path.join(this.buildDir, file), injected);
-      console.log(`   ✔ ${file}`);
-    }
-  }
+const jsFiles = fs.readdirSync(jsSrcDir).filter(f => f.endsWith(".js"));
 
-  async bundleOptimizations() {
-    console.log("⚡ Bundling src/optimizations/*.js ...");
+for (const file of jsFiles) {
+  const inputPath = path.join(jsSrcDir, file);
+  const outputPath = path.join(jsDistDir, file);
 
-    const optimizationsDir = path.join(this.srcDir, "src", "optimizations");
-    let bundle = "";
-
-    if (fs.existsSync(optimizationsDir)) {
-      const optFiles = fs.readdirSync(optimizationsDir).filter(f => f.endsWith(".js"));
-      for (const file of optFiles) {
-        const filePath = path.join(optimizationsDir, file);
-        bundle += `\n// ---- optimizations/${file} ----\n` + fs.readFileSync(filePath, "utf8");
-      }
-    }
-
-    if (bundle.trim() === "") {
-      console.log("   ⚠ No optimization scripts found.");
-      return;
-    }
-
-    const minified = await minify(bundle, {
-      compress: { dead_code: true, drop_debugger: true },
-      mangle: { reserved: ["AFRAME"] },
-      format: { comments: false }
+  try {
+    const code = fs.readFileSync(inputPath, "utf-8");
+    const minified = await minify(code, {
+      ecma: 2020,
+      compress: true,
+      mangle: true
     });
 
-    fs.writeFileSync(path.join(this.buildDir, "bundle.min.js"), minified.code);
-    console.log("   ✔ bundle.min.js");
-  }
-
-  copyStaticAssets() {
-    console.log("🖼️ Copying static assets...");
-    const dirs = ["assets", "css", "gemini-ui", "spotify", "tests"];
-
-    dirs.forEach(dir => {
-      const src = path.join(this.srcDir, dir);
-      if (fs.existsSync(src)) {
-        this.copyRecursive(src, path.join(this.buildDir, dir));
-      }
-    });
-
-    // Copy favicon and misc root files
-    const miscFiles = ["favicon.ico", "lookbook-xr-override.css"];
-    miscFiles.forEach(file => {
-      const src = path.join(this.srcDir, file);
-      if (fs.existsSync(src)) {
-        fs.copyFileSync(src, path.join(this.buildDir, file));
-      }
-    });
-  }
-
-  generateServiceWorker() {
-    console.log("⚙️ Generating service worker...");
-    const sw = `
-const CACHE_NAME = 'xr-optimized-v1';
-const urlsToCache = [
-  '/',
-  '/bundle.min.js',
-  'https://aframe.io/releases/1.4.0/aframe.min.js'
-];
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(urlsToCache)));
-});
-self.addEventListener('fetch', e => {
-  if (e.request.url.includes('/api/')) return;
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-});
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.map(k => k !== CACHE_NAME && caches.delete(k)))
-  ));
-});`;
-    fs.writeFileSync(path.join(this.buildDir, "sw.js"), sw);
-  }
-
-  copyRecursive(src, dest) {
-    const stats = fs.statSync(src);
-    if (stats.isDirectory()) {
-      fs.mkdirSync(dest, { recursive: true });
-      fs.readdirSync(src).forEach(child =>
-        this.copyRecursive(path.join(src, child), path.join(dest, child))
-      );
-    } else {
-      fs.copyFileSync(src, dest);
-    }
+    fs.writeFileSync(outputPath, minified.code, "utf-8");
+    console.log(`   ✔ ${file}`);
+  } catch (err) {
+    console.error(`   ❌ Failed on ${file}:`, err.message);
   }
 }
 
-if (require.main === module) {
-  new BuildOptimizer().build();
-}
-
-module.exports = BuildOptimizer;
+console.log("✅ Build finished.");
