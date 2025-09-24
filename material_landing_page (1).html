@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XR Labs - Immersive Experiences</title>
+    <meta name="description" content="Enter the future of VR/AR experiences with XR Labs. Chat with AI, explore virtual worlds, and push the boundaries of reality.">
+    
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts - Material Design Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Material Design 3 Dark Theme Variables */
+        :root {
+            /* Primary Colors */
+            --md-sys-color-primary: #A8C7FA;
+            --md-sys-color-on-primary: #002E69;
+            --md-sys-color-primary-container: #004494;
+            --md-sys-color-on-primary-container: #D6E3FF;
+            
+            /* Secondary Colors */
+            --md-sys-color-secondary: #BFC6DC;
+            --md-sys-color-on-secondary: #293042;
+            --md-sys-color-secondary-container: #3F4759;
+            --md-sys-color-on-secondary-container: #DBE2F9;
+            
+            /* Tertiary Colors */
+            --md-sys-color-tertiary: #DEBCDF;
+            --md-sys-color-on-tertiary: #402843;
+            --md-sys-color-tertiary-container: #583E5B;
+            --md-sys-color-on-tertiary-container: #FAD8FB;
+            
+            /* Error Colors */
+            --md-sys-color-error: #FFB4AB;
+            --md-sys-color-on-error: #690005;
+            --md-sys-color-error-container: #93000A;
+            --md-sys-color-on-error-container: #FFDAD6;
+            
+            /* Surface Colors */
+            --md-sys-color-surface: #121318;
+            --md-sys-color-on-surface: #E3E2E6;
+            --md-sys-color-surface-variant: #44474F;
+            --md-sys-color-on-surface-variant: #C4C7C5;
+            --md-sys-color-surface-container: #1F1F23;
+            --md-sys-color-surface-container-high: #2A2A2E;
+            --md-sys-color-surface-container-highest: #35353A;
+            
+            /* Background */
+            --md-sys-color-background: #0F1419;
+            --md-sys-color-on-background: #E3E2E6;
+            
+            /* Outline */
+            --md-sys-color-outline: #8E9297;
+            --md-sys-color-outline-variant: #44474F;
+            
+            /* Elevation */
+            --md-sys-elevation-level0: 0 0 0 0 transparent;
+            --md-sys-elevation-level1: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-level2: 0 1px 2px 0 rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-level3: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 4px 8px 3px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-level4: 0 2px 3px 0 rgba(0, 0, 0, 0.3), 0 6px 10px 4px rgba(0, 0, 0, 0.15);
+            --md-sys-elevation-level5: 0 4px 4px 0 rgba(0, 0, 0, 0.3), 0 8px 12px 6px rgba(0, 0, 0, 0.15);
+            
+            /* Typography */
+            --md-sys-typescale-display-large-font: 'Roboto', sans-serif;
+            --md-sys-typescale-display-large-size: 3.5rem;
+            --md-sys-typescale-display-large-weight: 400;
+            --md-sys-typescale-display-large-line-height: 4rem;
+            
+            --md-sys-typescale-headline-large-font: 'Roboto', sans-serif;
+            --md-sys-typescale-headline-large-size: 2rem;
+            --md-sys-typescale-headline-large-weight: 400;
+            --md-sys-typescale-headline-large-line-height: 2.5rem;
+            
+            --md-sys-typescale-title-large-font: 'Roboto', sans-serif;
+            --md-sys-typescale-title-large-size: 1.375rem;
+            --md-sys-typescale-title-large-weight: 400;
+            --md-sys-typescale-title-large-line-height: 1.75rem;
+            
+            --md-sys-typescale-body-large-font: 'Roboto', sans-serif;
+            --md-sys-typescale-body-large-size: 1rem;
+            --md-sys-typescale-body-large-weight: 400;
+            --md-sys-typescale-body-large-line-height: 1.5rem;
+            
+            --md-sys-typescale-label-large-font: 'Roboto', sans-serif;
+            --md-sys-typescale-label-large-size: 0.875rem;
+            --md-sys-typescale-label-large-weight: 500;
+            --md-sys-typescale-label-large-line-height: 1.25rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--md-sys-typescale-body-large-font);
+            font-size: var(--md-sys-typescale-body-large-size);
+            font-weight: var(--md-sys-typescale-body-large-weight);
+            line-height: var(--md-sys-typescale-body-large-line-height);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .md-app-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: var(--md-sys-color-surface-container);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .md-app-bar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .md-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--md-sys-color-primary);
+        }
+
+        .md-logo .material-icons {
+            font-size: 32px;
+        }
+
+        .md-logo-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: var(--md-sys-typescale-title-large-size);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .md-nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .md-nav-link {
+            color: var(--md-sys-color-on-surface);
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .md-nav-link:hover {
+            background-color: var(--md-sys-color-surface-container-high);
+        }
+
+        .md-nav-link.active {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+        }
+
+        /* Hero Section */
+        .md-hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            background: linear-gradient(
+                135deg,
+                var(--md-sys-color-surface) 0%,
+                var(--md-sys-color-surface-container) 100%
+            );
+        }
+
+        .md-hero h1 {
+            font-family: var(--md-sys-typescale-display-large-font);
+            font-size: clamp(2.5rem, 5vw, var(--md-sys-typescale-display-large-size));
+            font-weight: var(--md-sys-typescale-display-large-weight);
+            line-height: var(--md-sys-typescale-display-large-line-height);
+            color: var(--md-sys-color-on-surface);
+            margin-bottom: 24px;
+            background: linear-gradient(
+                135deg,
+                var(--md-sys-color-primary) 0%,
+                var(--md-sys-color-tertiary) 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .md-hero p {
+            font-size: 1.125rem;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .md-hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Material Design Buttons */
+        .md-button {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 20px;
+            font-family: var(--md-sys-typescale-label-large-font);
+            font-size: var(--md-sys-typescale-label-large-size);
+            font-weight: var(--md-sys-typescale-label-large-weight);
+            line-height: var(--md-sys-typescale-label-large-line-height);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow: hidden;
+            outline: none;
+            min-height: 40px;
+        }
+
+        .md-button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: currentColor;
+            opacity: 0;
+            transition: opacity 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .md-button:hover::before {
+            opacity: 0.08;
+        }
+
+        .md-button:focus::before {
+            opacity: 0.12;
+        }
+
+        .md-button:active::before {
+            opacity: 0.12;
+        }
+
+        .md-button-filled {
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            box-shadow: var(--md-sys-elevation-level0);
+        }
+
+        .md-button-filled:hover {
+            box-shadow: var(--md-sys-elevation-level1);
+        }
+
+        .md-button-outlined {
+            background-color: transparent;
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline);
+        }
+
+        .md-button-outlined:hover {
+            background-color: var(--md-sys-color-surface-container-highest);
+        }
+
+        /* Experience Cards */
+        .md-experiences {
+            padding: 80px 0;
+            background-color: var(--md-sys-color-background);
+        }
+
+        .md-section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .md-section-header h2 {
+            font-family: var(--md-sys-typescale-headline-large-font);
+            font-size: var(--md-sys-typescale-headline-large-size);
+            font-weight: var(--md-sys-typescale-headline-large-weight);
+            line-height: var(--md-sys-typescale-headline-large-line-height);
+            color: var(--md-sys-color-on-background);
+            margin-bottom: 16px;
+        }
+
+        .md-section-header p {
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .md-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .md-card {
+            background-color: var(--md-sys-color-surface-container);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .md-card:hover {
+            box-shadow: var(--md-sys-elevation-level3);
+            transform: translateY(-4px);
+        }
+
+        .md-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .md-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 24px;
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .md-card-title {
+            font-family: var(--md-sys-typescale-title-large-font);
+            font-size: var(--md-sys-typescale-title-large-size);
+            font-weight: var(--md-sys-typescale-title-large-weight);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .md-card-description {
+            color: var(--md-sys-color-on-surface-variant);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .md-chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .md-chip {
+            background-color: var(--md-sys-color-secondary-container);
+            color: var(--md-sys-color-on-secondary-container);
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .md-card-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .md-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--md-sys-color-tertiary-container);
+            color: var(--md-sys-color-on-tertiary-container);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .md-badge.live {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+        }
+
+        .md-badge.beta {
+            background-color: var(--md-sys-color-error-container);
+            color: var(--md-sys-color-on-error-container);
+        }
+
+        /* Footer */
+        .md-footer {
+            background-color: var(--md-sys-color-surface-container);
+            padding: 40px 0;
+            border-top: 1px solid var(--md-sys-color-outline-variant);
+        }
+
+        .md-footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .md-footer-text {
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .md-social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .md-social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: var(--md-sys-color-surface-container-high);
+            color: var(--md-sys-color-on-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .md-social-link:hover {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+        }
+
+        /* WebXR Support Banner */
+        .md-webxr-banner {
+            background-color: var(--md-sys-color-surface-container-high);
+            border: 1px solid var(--md-sys-color-outline-variant);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .md-webxr-banner.supported {
+            background-color: var(--md-sys-color-primary-container);
+            border-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary-container);
+        }
+
+        .md-webxr-banner.limited {
+            background-color: var(--md-sys-color-error-container);
+            border-color: var(--md-sys-color-error);
+            color: var(--md-sys-color-on-error-container);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .md-nav-links {
+                display: none;
+            }
+            
+            .md-hero {
+                padding: 100px 0 60px;
+            }
+            
+            .md-hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .md-card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .md-footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Loading Animation */
+        .md-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ripple Effect */
+        .md-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .md-ripple::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle, currentColor 0%, transparent 70%);
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .md-ripple:active::after {
+            opacity: 0.2;
+            transform: scale(1);
+            transition: all 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+    </style>
+</head>
+<body>
+    <!-- App Bar -->
+    <header class="md-app-bar">
+        <div class="md-app-bar-content">
+            <a href="/" class="md-logo">
+                <span class="material-icons">explore</span>
+                <span class="md-logo-text">XR LABS</span>
+            </a>
+            <nav>
+                <ul class="md-nav-links">
+                    <li><a href="#experiences" class="md-nav-link">Experiences</a></li>
+                    <li><a href="#about" class="md-nav-link">About</a></li>
+                    <li><a href="#contact" class="md-nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="md-hero">
+            <div class="container">
+                <h1 class="md-fade-in">Welcome to the Future</h1>
+                <p class="md-fade-in" style="animation-delay: 0.1s;">
+                    Step into immersive VR/AR experiences powered by cutting-edge AI technology. 
+                    Chat with intelligent assistants, explore virtual worlds, and push the boundaries of reality.
+                </p>
+                
+                <div class="md-hero-actions md-fade-in" style="animation-delay: 0.2s;">
+                    <a href="assistant.html" class="md-button md-button-filled md-ripple">
+                        <span class="material-icons">smart_toy</span>
+                        Launch VR Chat
+                    </a>
+                    <a href="#experiences" class="md-button md-button-outlined md-ripple">
+                        <span class="material-icons">explore</span>
+                        Explore More
+                    </a>
+                </div>
+
+                <div class="md-webxr-banner" id="webxr-status">
+                    <span id="support-text">Checking WebXR support...</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experiences Section -->
+        <section class="md-experiences" id="experiences">
+            <div class="container">
+                <div class="md-section-header">
+                    <h2>Immersive Experiences</h2>
+                    <p>Choose your adventure in the metaverse</p>
+                </div>
+
+                <div class="md-card-grid">
+                    <!-- AI Chat Assistant -->
+                    <div class="md-card md-fade-in md-ripple">
+                        <div class="md-badge live">Live</div>
+                        
+                        <div class="md-card-header">
+                            <div class="md-card-icon">
+                                <span class="material-icons">smart_toy</span>
+                            </div>
+                            <h3 class="md-card-title">AI Chat Assistant</h3>
+                        </div>
+                        
+                        <p class="md-card-description">
+                            Chat with an advanced AI assistant in immersive VR/AR. Features voice recognition, 
+                            spatial audio, and intelligent conversation flows optimized for 60+ FPS performance.
+                        </p>
+                        
+                        <div class="md-chip-group">
+                            <span class="md-chip">Real-time Voice</span>
+                            <span class="md-chip">3D Spatial UI</span>
+                            <span class="md-chip">Performance Optimized</span>
+                            <span class="md-chip">Cross-platform VR</span>
+                        </div>
+
+                        <div class="md-card-actions">
+                            <a href="assistant.html" class="md-button md-button-filled md-ripple">
+                                <span class="material-icons">launch</span>
+                                Launch
+                            </a>
+                            <a href="#assistant-info" class="md-button md-button-outlined md-ripple">
+                                <span class="material-icons">info</span>
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Virtual Workspace -->
+                    <div class="md-card md-fade-in md-ripple" style="animation-delay: 0.1s;">
+                        <div class="md-badge beta">Beta</div>
+                        
+                        <div class="md-card-header">
+                            <div class="md-card-icon">
+                                <span class="material-icons">business</span>
+                            </div>
+                            <h3 class="md-card-title">Virtual Workspace</h3>
+                        </div>
+                        
+                        <p class="md-card-description">
+                            Collaborate in a virtual office environment. Share screens, hold meetings, 
+                            and work together in immersive 3D spaces with Material Design interface elements.
+                        </p>
+                        
+                        <div class="md-chip-group">
+                            <span class="md-chip">Multi-user</span>
+                            <span class="md-chip">Screen Sharing</span>
+                            <span class="md-chip">Virtual Whiteboards</span>
+                            <span class="md-chip">Spatial Audio</span>
+                        </div>
+
+                        <div class="md-card-actions">
+                            <a href="workspace.html" class="md-button md-button-filled md-ripple">
+                                <span class="material-icons">meeting_room</span>
+                                Enter Workspace
+                            </a>
+                            <a href="#workspace-info" class="md-button md-button-outlined md-ripple">
+                                <span class="material-icons">info</span>
+                                Details
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- AR Showcase -->
+                    <div class="md-card md-fade-in md-ripple" style="animation-delay: 0.2s;">
+                        <div class="md-badge beta">Beta</div>
+                        
+                        <div class="md-card-header">
+                            <div class="md-card-icon">
+                                <span class="material-icons">view_in_ar</span>
+                            </div>
+                            <h3 class="md-card-title">AR Showcase</h3>
+                        </div>
+                        
+                        <p class="md-card-description">
+                            Experience augmented reality directly in your browser. Place virtual objects 
+                            in your real environment with Material Design interactions and real-time lighting.
+                        </p>
+                        
+                        <div class="md-chip-group">
+                            <span class="md-chip">Plane Detection</span>
+                            <span class="md-chip">Object Placement</span>
+                            <span class="md-chip">Mobile AR</span>
+                            <span class="md-chip">Real-time Lighting</span>
+                        </div>
+
+                        <div class="md-card-actions">
+                            <a href="ar-showcase.html" class="md-button md-button-filled md-ripple">
+                                <span class="material-icons">camera_alt</span>
+                                Try AR
+                            </a>
+                            <a href="#ar-info" class="md-button md-button-outlined md-ripple">
+                                <span class="material-icons">phone_android</span>
+                                Requirements
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="md-footer">
+        <div class="container">
+            <div class="md-footer-content">
+                <div class="md-footer-text">
+                    &copy; 2024 XR Labs. Pushing the boundaries of immersive technology.
+                </div>
+                <div class="md-social-links">
+                    <a href="#" class="md-social-link" title="GitHub">
+                        <span class="material-icons">code</span>
+                    </a>
+                    <a href="#" class="md-social-link" title="Twitter">
+                        <span class="material-icons">alternate_email</span>
+                    </a>
+                    <a href="#" class="md-social-link" title="Discord">
+                        <span class="material-icons">forum</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Material Design Ripple Effect
+        document.querySelectorAll('.md-ripple').forEach(element => {
+            element.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: radial-gradient(circle, currentColor 0%, transparent 70%);
+                    opacity: 0.3;
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+                    pointer-events: none;
+                `;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // WebXR Support Detection
+        async function checkWebXRSupport() {
+            const statusEl = document.getElementById('webxr-status');
+            const textEl = document.getElementById('support-text');
+            
+            if (!navigator.xr) {
+                statusEl.className = 'md-webxr-banner limited';
+                textEl.innerHTML = '<span class="material-icons" style="vertical-align: middle; margin-right: 8px;">warning</span>WebXR not supported. Use Chrome/Firefox for full VR features.';
+                return;
+            }
+            
+            try {
+                const vrSupported = await navigator.xr.isSessionSupported('immersive-vr');
+                const arSupported = await navigator.xr.isSessionSupported('immersive-ar');
+                
+                if (vrSupported || arSupported) {
+                    statusEl.className = 'md-webxr-banner supported';
+                    textEl.innerHTML = `<span class="material-icons" style="vertical-align: middle; margin-right: 8px;">check_circle</span>WebXR Ready! ${vrSupported ? 'VR' : ''} ${arSupported ? 'AR' : ''} supported.`;
+                } else {
+                    statusEl.className = 'md-webxr-banner';
+                    textEl.innerHTML = '<span class="material-icons" style="vertical-align: middle; margin-right: 8px;">headset</span>WebXR detected. Connect a VR headset for full experience.';
+                }
+            } catch (error) {
+                statusEl.className = 'md-webxr-banner';
+                textEl.innerHTML = '<span class="material-icons" style="vertical-align: middle; margin-right: 8px;">public</span>WebXR available. VR experiences ready to launch!';
+            }
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.md-fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkWebXRSupport();
+            
+            console.log('🎨 Material Design XR Labs initialized');
+            console.log('🎯 VR Experiences ready with Material Design 3');
+            
+            // Track page performance
+            if (window.performance) {
+                window.addEventListener('load', () => {
+                    setTimeout(() => {
+                        const perfData = performance.getEntriesByType('navigation')[0];
+                        console.log(`⚡ Page loaded in ${Math.round(perfData.loadEventEnd)}ms`);
+                    }, 100);
+                });
+            }
+        });
+
+        // App Bar scroll behavior
+        let lastScrollY = window.scrollY;
+        const appBar = document.querySelector('.md-app-bar');
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                appBar.style.transform = 'translateY(-100%)';
+            } else {
+                appBar.style.transform = 'translateY(0)';
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+    </script>
+</body>
+</html>
