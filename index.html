@@ -21,7 +21,7 @@
   <script src="js/assistant.js"></script>
   <script src="js/travel-node-component.js"></script>
   <script src="js/nav.js"></script>
-   <script src="nav.js"></script>
+
 
 
   <!-- (kept) Google-sheet-driven 3D catalog loader -->
@@ -37,19 +37,7 @@
 <body>
   <!-- Navigation will be automatically added by nav.js -->
   
- <!-- <div class="ui">
-    <div class="topbar glass">
-      <div class="brand"><div class="logo">i</div> XR Labs <span style="font-size:11px; opacity:.8; margin-left:6px">Metaverse</span></div>
-      <div class="spacer"></div>
-      <button class="btn" id="btnCatalog">Catalog</button>
-      <button class="btn" id="btnCart">Cart (<span id="cartCount">0</span>)</button>
-      <button class="btn" id="btnVR">Enter VR</button>
-    </div>
-
-    <div id="catalog" class="panel"></div>
-    <div id="cart" class="panel"></div>
-    <div class="hint">Desktop: WASD + mouse · VR: point + trigger</div>
-  </div>2D UI overlay -->
+ 
 
   <!-- SINGLE scene -->
   <a-scene antialias="true" vr-mode-ui="enabled: true" loading-screen="backgroundColor: #212121" physics>
@@ -68,87 +56,294 @@
 
     <!-- Assets -->
     <a-assets>
-      <a-asset-item id="roboto" src="https://cdn.aframe.io/fonts/Roboto-msdf.json"></a-asset-item>
+       <a-asset-item id="roboto" src="https://cdn.aframe.io/fonts/Roboto-msdf.json"></a-asset-item>
+     
+    
       <a-asset-item id="assistant-gltf" src="assets/character.glb"></a-asset-item>
+       <audio
+          id="piano_c"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fnote%20c%20piano.mp3?v=1565881186559"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_d"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20d.mp3?v=1565883564721"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_e"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20e.mp3?v=1565883566923"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_f"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20f.mp3?v=1565883568318"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_g"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20g.mp3?v=1565883569859"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_a"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20a.mp3?v=1565883562372"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_b"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20b.mp3?v=1565883563277"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_hc"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fhigh%20c%20piano.mp3?v=1565889882364"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_csharp"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fc%20sharp.mp3?v=1565890996511"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_eflat"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fe%20flat.mp3?v=1565890997434"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_fsharp"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Ff%20sharp.mp3?v=1565890998603"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_gsharp"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fg%20sharp.mp3?v=1565890999944"
+          crossorigin="anonymous"
+        ></audio>
+        <audio
+          id="piano_bflat"
+          src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20b%20flat.mp3?v=1565891011666"
+          crossorigin="anonymous"
+        ></audio>
+        <!--MIXINS declare attributes just once, for reuse - like a javascript variable!-->
+        <!--geometry mixins-->
 
-      <!-- audio -->
-      <audio id="piano_c" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fnote%20c%20piano.mp3?v=1565881186559" crossorigin="anonymous"></audio>
-      <audio id="piano_d" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20d.mp3?v=1565883564721" crossorigin="anonymous"></audio>
-      <audio id="piano_e" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20e.mp3?v=1565883566923" crossorigin="anonymous"></audio>
-      <audio id="piano_f" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20f.mp3?v=1565883568318" crossorigin="anonymous"></audio>
-      <audio id="piano_g" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20g.mp3?v=1565883569859" crossorigin="anonymous"></audio>
-      <audio id="piano_a" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20a.mp3?v=1565883562372" crossorigin="anonymous"></audio>
-      <audio id="piano_b" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20b.mp3?v=1565883563277" crossorigin="anonymous"></audio>
-      <audio id="piano_hc" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fhigh%20c%20piano.mp3?v=1565889882364" crossorigin="anonymous"></audio>
-      <audio id="piano_csharp" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fc%20sharp.mp3?v=1565890996511" crossorigin="anonymous"></audio>
-      <audio id="piano_eflat" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fe%20flat.mp3?v=1565890997434" crossorigin="anonymous"></audio>
-      <audio id="piano_fsharp" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Ff%20sharp.mp3?v=1565890998603" crossorigin="anonymous"></audio>
-      <audio id="piano_gsharp" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fg%20sharp.mp3?v=1565890999944" crossorigin="anonymous"></audio>
-      <audio id="piano_bflat" src="https://cdn.glitch.com/f787028e-c9fe-4c7e-be02-7c6f07bca314%2Fpiano%20b%20flat.mp3?v=1565891011666" crossorigin="anonymous"></audio>
+        <!--color mixins-->
+        <a-mixin id="black" material="color:#000000"></a-mixin>
+        <a-mixin id="white" material="color:#e6e6e6"></a-mixin>
+      <a-mixin id="bar"
+          geometry="primitive: box"
+          material="color: rgb(10, 20, 50); shader: flat"
+          scale-y-color="from: 10 20 50; to: 210, 220, 250; maxScale: 15"
+        ></a-mixin>
+        <a-asset-item
+          id="adidas"
+          src="https://cdn.glitch.com/80103382-77c7-436e-ac28-b71dc8e4468c%2Fgazelle.glb"
+        ></a-asset-item>
+        <a-asset-item
+          id="newbalance"
+          src="https://cdn.glitch.com/b2a38be5-8f68-46a7-9578-fcbaeb96f8a1%2Fnb.glb"
+        ></a-asset-item>
+        <a-asset-item
+          id="vizor-obj"
+          src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fvizor.obj"
+        ></a-asset-item>
+        <a-asset-item
+          id="frame-obj"
+          src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fframe.obj"
+        ></a-asset-item>
+        <a-asset-item
+          id="helmet-obj"
+          src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fhelmet.obj"
+        ></a-asset-item>
+        <a-asset-item
+          id="suit-obj"
+          src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fsuit.obj"
+        ></a-asset-item>
+        <img
+          id="dawn"
+          crossorigin="anonymous"
+          src="https://cdn.glitch.com/9f5d1b92-a581-4134-8864-9bd98ff8ed97%2Fdawn.jpeg"
+        />
+        <a-mixin
+          id="board"
+          geometry="depth: .05; height: 1; width: 6"
+          material="shader: flat"
+          pivot="0 0.5 0"
+          position="0 -1 0"
+        ></a-mixin>
+        <a-mixin
+          id="unhinge"
+          attribute="rotation"
+          to="0 0 0"
+          dur="1000"
+          fill="both"
+        ></a-mixin>
+        <a-mixin id="checkpoint"></a-mixin>
+        <a-mixin id="checkpoint-hovered" color="#141414"></a-mixin>
+        <video id="1" autoplay loop="true" src="assets/1.mp4"></video>
+        <video id="2" autoplay loop="true" src="assets/2.mp4"></video>
+        <video id="3" autoplay loop="true" src="assets/3.mp4"></video>
+        <video id="4" autoplay loop="true" src="assets/4.mp4"></video>
+        <video id="5" autoplay loop="true" src="assets/5.mp4"></video>
+        <a-asset-item
+          id="picframe.obj"
+          src="assets/picframe.obj"
+          preload="auto"
+        ></a-asset-item>
+        <a-asset-item
+          id="las_vegas_obj"
+          src="assets/Las_Vegas.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="las_vegas_diffuse"
+          src="assets/Las_vegas_Diffuse_01.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <img
+          id="las_vegas_normal"
+          src="assets/Las_vegas_Normal_01.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="damas_pillier_obj"
+          src="assets/Damas.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="Damas_Pillier_diffuse"
+          src="assets/Damas_02_diffuse_03.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="damas_sortie_obj"
+          src="assets/panneau_sortie.obj"
+          preload="auto"
+        ></a-asset-item>
+        <a-asset-item
+          id="damas_station_obj"
+          src="assets/panneau_station.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="Damas_panneaux_diffuse"
+          src="assets/Panneau_metro_Diffuse.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="bust"
+          src="assets/Statue.glb"
+          preload="auto"
+        ></a-asset-item>
+        
+        <a-asset-item
+          id="console"
+          src="assets/walnut.glb"
+          preload="auto"
+        ></a-asset-item>
+        <a-asset-item
+          id="lamp_obj"
+          src="assets/Lamp.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="lamp_diffuse"
+          src="assets/echelle_diffuse_01.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="cimaise_billet_obj"
+          src="assets/Cimese_Echelle_Billet_01.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="cimaise_billet_diffuse"
+          src="assets/Cimese_Echelle_Billet_Diffuse_02.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="cimaise_poster_obj"
+          src="assets/Cimaise_02.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="cimaise_posters_diffuse"
+          src="assets/Cimaise_02_Diffuse_05_4096.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <img
+          id="pic1"
+          src="assets/pic1.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <img
+          id="pic2"
+          src="assets/pic2.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <img
+          id="floor"
+          src="assets/floor2.png"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <img
+          id="pic3"
+          src="assets/pic3.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="toit_obj"
+          src="assets/Toit_01.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="toit_diffuse"
+          src="assets/ToitOcclusion_ambiante.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="mur_obj"
+          src="assets/Mur_Scene_03.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="mur_diffuse"
+          src="assets/5-Mur_Diffuse_01_15.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+         <img
+          id="vidcards"
+          src="assets/cards-01.png"
+          crossorigin="anonymous"
+          preload="auto"
+        />
+        <a-asset-item
+          id="sol_obj"
+          src="assets/Sol.obj"
+          preload="auto"
+        ></a-asset-item>
+        <img
+          id="sol_diffuse"
+          src="assets/Sol_diffuse_08.jpg"
+          crossorigin="anonymous"
+          preload="auto"
+        />
 
-      <!-- misc assets -->
-      <a-mixin id="black" material="color:#000000"></a-mixin>
-      <a-mixin id="white" material="color:#e6e6e6"></a-mixin>
-      <a-mixin id="bar" geometry="primitive: box" material="color: rgb(10, 20, 50); shader: flat"></a-mixin>
-
-      <a-asset-item id="adidas" src="https://cdn.glitch.com/80103382-77c7-436e-ac28-b71dc8e4468c%2Fgazelle.glb"></a-asset-item>
-      <a-asset-item id="newbalance" src="https://cdn.glitch.com/b2a38be5-8f68-46a7-9578-fcbaeb96f8a1%2Fnb.glb"></a-asset-item>
-      <a-asset-item id="vizor-obj" src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fvizor.obj"></a-asset-item>
-      <a-asset-item id="frame-obj" src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fframe.obj"></a-asset-item>
-      <a-asset-item id="helmet-obj" src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fhelmet.obj"></a-asset-item>
-      <a-asset-item id="suit-obj" src="https://cdn.glitch.com/95b833fa-57f9-4d7f-8d26-094de79b4d3a%2Fsuit.obj"></a-asset-item>
-
-      <img id="dawn" crossorigin="anonymous" src="https://cdn.glitch.com/9f5d1b92-a581-4134-8864-9bd98ff8ed97%2Fdawn.jpeg" />
-
-      <a-mixin id="board" geometry="depth: .05; height: 1; width: 6" material="shader: flat" pivot="0 0.5 0" position="0 -1 0"></a-mixin>
-      <a-mixin id="unhinge" attribute="rotation" to="0 0 0" dur="1000" fill="both"></a-mixin>
-      <a-mixin id="checkpoint"></a-mixin>
-      <a-mixin id="checkpoint-hovered" color="#141414"></a-mixin>
-
-      <video id="1" autoplay loop="true" src="assets/1.mp4"></video>
-      <video id="2" autoplay loop="true" src="assets/2.mp4"></video>
-      <video id="3" autoplay loop="true" src="assets/3.mp4"></video>
-      <video id="4" autoplay loop="true" src="assets/4.mp4"></video>
-      <video id="5" autoplay loop="true" src="assets/5.mp4"></video>
-
-      <a-asset-item id="picframe.obj" src="assets/picframe.obj" preload="auto"></a-asset-item>
-      <a-asset-item id="las_vegas_obj" src="assets/Las_Vegas.obj" preload="auto"></a-asset-item>
-      <img id="las_vegas_diffuse" src="assets/Las_vegas_Diffuse_01.jpg" crossorigin="anonymous" preload="auto"/>
-      <img id="las_vegas_normal"  src="assets/Las_vegas_Normal_01.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="damas_pillier_obj" src="assets/Damas.obj" preload="auto"></a-asset-item>
-      <img id="Damas_Pillier_diffuse" src="assets/Damas_02_diffuse_03.jpg" crossorigin="anonymous" preload="auto"/>
-      <a-asset-item id="damas_sortie_obj"  src="assets/panneau_sortie.obj" preload="auto"></a-asset-item>
-      <a-asset-item id="damas_station_obj" src="assets/panneau_station.obj" preload="auto"></a-asset-item>
-      <img id="Damas_panneaux_diffuse" src="assets/Panneau_metro_Diffuse.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="bust"    src="assets/Statue.glb" preload="auto"></a-asset-item>
-      <a-asset-item id="console" src="assets/walnut.glb" preload="auto"></a-asset-item>
-
-      <a-asset-item id="lamp_obj" src="assets/Lamp.obj" preload="auto"></a-asset-item>
-      <img id="lamp_diffuse" src="assets/echelle_diffuse_01.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="cimaise_billet_obj" src="assets/Cimese_Echelle_Billet_01.obj" preload="auto"></a-asset-item>
-      <img id="cimaise_billet_diffuse" src="assets/Cimese_Echelle_Billet_Diffuse_02.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="cimaise_poster_obj" src="assets/Cimaise_02.obj" preload="auto"></a-asset-item>
-      <img id="cimaise_posters_diffuse" src="assets/Cimaise_02_Diffuse_05_4096.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <img id="pic1"  src="assets/pic1.jpg"  crossorigin="anonymous" preload="auto"/>
-      <img id="pic2"  src="assets/pic2.jpg"  crossorigin="anonymous" preload="auto"/>
-      <img id="floor" src="assets/floor2.png" crossorigin="anonymous" preload="auto"/>
-      <img id="pic3"  src="assets/pic3.jpg"  crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="toit_obj" src="assets/Toit_01.obj" preload="auto"></a-asset-item>
-      <img id="toit_diffuse" src="assets/ToitOcclusion_ambiante.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="mur_obj" src="assets/Mur_Scene_03.obj" preload="auto"></a-asset-item>
-      <img id="mur_diffuse" src="assets/5-Mur_Diffuse_01_15.jpg" crossorigin="anonymous" preload="auto"/>
-
-      <img id="vidcards" src="assets/cards-01.png" crossorigin="anonymous" preload="auto"/>
-
-      <a-asset-item id="sol_obj" src="assets/Sol.obj" preload="auto"></a-asset-item>
-      <img id="sol_diffuse" src="assets/Sol_diffuse_08.jpg" crossorigin="anonymous" preload="auto"/>
+    
     </a-assets>
 
     <!-- 
