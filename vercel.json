@@ -1,47 +1,44 @@
- {
+{
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "framework": null,
+
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "geolocation=(), microphone=(self), camera=(self)"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), microphone=(self), camera=(self)" }
       ]
     },
     {
       "source": "/(.*)\\.(js|css|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
-    },
-   {
-  "rewrites": [
-    { "source": "/Ar-studio", "destination": "/AR-Studio/studio-master/index.html" }
-  ]
-}
+    }
+  ],
 
+  "rewrites": [
+    { "source": "/Ar-studio", "destination": "/AR-Studio/studio-master/index.html" },
+    { "source": "/Browser", "destination": "/Browser.html" },
+    { "source": "/XR-test", "destination": "/XR-test.html" },
+    { "source": "/Ar-showcase", "destination": "/Ar-showcase.html" },
+    { "source": "/Assistant", "destination": "/Assistant.html" },
+    { "source": "/Beta", "destination": "/Beta.html" },
+    { "source": "/Gallery", "destination": "/Gallery.html" },
+    { "source": "/Maps", "destination": "/Maps.html" },
+    { "source": "/Menu", "destination": "/Menu.html" },
+    { "source": "/Old-chat", "destination": "/Old-chat.html" },
+    { "source": "/Shop", "destination": "/Shop.html" },
+    { "source": "/Terrain", "destination": "/Terrain.html" },
+    { "source": "/Video-player", "destination": "/Video-player.html" },
+    { "source": "/vologram", "destination": "/vologram.html" },
+    { "source": "/Workspace", "destination": "/Workspace.html" },
+    { "source": "/Gemini-copy", "destination": "/gemini-ui/copy.html" },
+    { "source": "/Gemini-ui", "destination": "/gemini-ui/index.html" }
   ]
 }
