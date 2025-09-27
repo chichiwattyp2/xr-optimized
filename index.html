@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>XR Home Chat - Designed by Chris Watt-Pringle</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XR Optimized – by Chris Watt-Pringle</title>
+
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
 
   <style>
-    /* -------------------------------
-       COLOR PALETTE (Swiss + XR inspired)
-    -------------------------------- */
     :root {
       --prussian-blue: #003049;
       --fire-engine-red: #d62828;
@@ -21,14 +19,9 @@
 
       --background: var(--vanilla);
       --on-background: #111;
-
       --surface: #fff;
-      --on-surface: #111;
     }
 
-    /* -------------------------------
-       BASE STYLES
-    -------------------------------- */
     * {
       margin: 0;
       padding: 0;
@@ -36,7 +29,7 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Inter", sans-serif;
       background: var(--background);
       color: var(--on-background);
       line-height: 1.6;
@@ -44,7 +37,7 @@
     }
 
     h1, h2, h3 {
-      font-family: 'Orbitron', sans-serif;
+      font-family: "Orbitron", sans-serif;
       letter-spacing: -0.5px;
     }
 
@@ -54,15 +47,13 @@
       padding: 0 24px;
     }
 
-    /* -------------------------------
-       NAVIGATION
-    -------------------------------- */
+    /* NAV */
     .nav-header {
       position: fixed;
       top: 0;
       width: 100%;
       background: var(--surface);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
       z-index: 1000;
     }
     nav {
@@ -74,45 +65,55 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-weight: 700;
-      text-decoration: none;
       color: var(--fire-engine-red);
+      text-decoration: none;
     }
     .nav-links {
       display: flex;
-      flex-wrap: wrap;
       gap: 16px;
       align-items: center;
+      flex-wrap: wrap;
     }
     .nav-links a {
-      color: var(--on-background);
       text-decoration: none;
+      color: var(--on-background);
       font-weight: 500;
-      padding: 8px 0;
-      position: relative;
     }
     .nav-links a:hover {
       color: var(--fire-engine-red);
     }
 
-    .md-button {
-      border-radius: 100px;
-      padding: 8px 16px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      cursor: pointer;
+    .dropdown {
+      position: relative;
     }
-    .md-button-outlined {
-      border: 1px solid var(--fire-engine-red);
-      color: var(--fire-engine-red);
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 120%;
+      left: 0;
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 10px 0;
+      min-width: 160px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 8px 16px;
+      color: #111;
+      font-size: 14px;
+    }
+    .dropdown-menu a:hover {
+      background: var(--vanilla);
     }
 
-    /* -------------------------------
-       HERO
-    -------------------------------- */
+    /* HERO */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -120,34 +121,44 @@
       padding: 140px 0 80px;
       background: linear-gradient(135deg, var(--prussian-blue), var(--fire-engine-red));
       color: white;
-      position: relative;
     }
-    .hero-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-    }
-    .hero-text h1 {
-      font-size: 52px;
-      margin-bottom: 24px;
+    .hero h1 {
+      font-size: 56px;
       background: linear-gradient(135deg, var(--orange-wheel), var(--xanthous));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-    .hero-text p {
+    .hero p {
+      margin: 24px 0;
       font-size: 18px;
-      margin-bottom: 32px;
-    }
-    .hero-buttons {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
     }
 
-    /* -------------------------------
-       FEATURES
-    -------------------------------- */
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .md-button {
+      border-radius: 100px;
+      padding: 12px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .md-button-primary {
+      background: var(--orange-wheel);
+      color: white;
+    }
+    .md-button-outline {
+      border: 1px solid white;
+      color: white;
+    }
+
+    /* FEATURES */
     .features {
       padding: 100px 0;
       background: var(--surface);
@@ -155,11 +166,6 @@
     .section-header {
       text-align: center;
       margin-bottom: 60px;
-    }
-    .section-header h2 {
-      color: var(--fire-engine-red);
-      font-size: 32px;
-      margin-bottom: 12px;
     }
     .feature-grid {
       display: grid;
@@ -170,17 +176,10 @@
       background: var(--vanilla);
       padding: 24px;
       border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: all 0.3s ease;
-    }
-    .feature-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
-    /* -------------------------------
-       CREATOR NOTE
-    -------------------------------- */
+    /* CREATOR NOTE */
     .creator-note {
       padding: 100px 0;
       background: var(--surface);
@@ -188,8 +187,8 @@
     .note-content {
       display: flex;
       gap: 40px;
-      align-items: center;
       flex-wrap: wrap;
+      align-items: center;
     }
     .creator-photo {
       width: 160px;
@@ -197,120 +196,184 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid var(--orange-wheel);
-      box-shadow: 0 0 25px rgba(0,48,73,0.6), 0 0 45px rgba(214,40,40,0.4);
-    }
-    .note-content h2 {
-      color: var(--fire-engine-red);
-      margin-bottom: 16px;
+      box-shadow: 0 0 25px rgba(0, 48, 73, 0.6), 0 0 45px rgba(214, 40, 40, 0.4);
     }
 
-    /* -------------------------------
-       CTA
-    -------------------------------- */
-    .cta-section {
+    /* CTA */
+    .cta {
       padding: 120px 0;
       background: var(--fire-engine-red);
-      color: white;
       text-align: center;
+      color: white;
     }
 
-    /* -------------------------------
-       FOOTER
-    -------------------------------- */
+    /* FOOTER */
     footer {
       background: var(--prussian-blue);
       color: white;
       padding: 60px 0 30px;
     }
-    .footer-content {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
     .footer-bottom {
       text-align: center;
-      font-size: 14px;
       opacity: 0.8;
     }
 
-    /* -------------------------------
-       RESPONSIVE
-    -------------------------------- */
+    /* MOBILE MENU */
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--on-background);
+      cursor: pointer;
+      padding: 8px;
+    }
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 280px;
+      height: 100vh;
+      background: var(--surface);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 2000;
+      transition: left 0.3s ease;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .mobile-menu.active {
+      left: 0;
+    }
+    .mobile-menu nav a {
+      margin: 4px 0;
+      text-decoration: none;
+      color: var(--on-background);
+    }
+
     @media (max-width: 900px) {
-      .hero-content {
-        grid-template-columns: 1fr;
+      .nav-links {
+        display: none;
+      }
+      .mobile-menu-toggle {
+        display: block;
       }
     }
   </style>
 </head>
 <body>
-
-  <!-- Navigation -->
+  <!-- NAV -->
   <header class="nav-header">
     <div class="md-container">
       <nav>
-        <a href="#" class="logo">
+        <a href="/" class="logo">
           <span class="material-symbols-rounded">view_in_ar</span>
-          <span>XR Home Chat</span>
+          XR Optimized
         </a>
         <div class="nav-links">
-          <a href="site-index.html">Index</a>
           <a href="#features">Features</a>
-          <a href="#how-it-works">How It Works</a>
-          <a href="#demo">Demo</a>
           <a href="#creator">About Chris</a>
 
-          <!-- Requested links -->
-          <a href="public/AR-Studio/studio-master/index.html">AR Studio</a>
-          <a href="browser.html">Browser</a>
-          <a href="XR-Test.html">XR Test</a>
-          <a href="ar-showcase.html">AR Showcase</a>
-          <a href="assistant.html">Assistant</a>
-          <a href="beta.html">Beta</a>
-          <a href="gallery.html">Gallery</a>
-          <a href="maps.html">Maps</a>
-          <a href="menu.html">Menu</a>
-          <a href="old-chat.html">Old Chat</a>
-          <a href="shop.html">Shop</a>
-          <a href="terrain.html">Terrain</a>
-          <a href="video-player.html">Video Player</a>
-          <a href="vologram.html">Vologram</a>
-          <a href="workspace.html">Workspace</a>
-          <a href="gemini-ui/copy.html">Gemini Copy</a>
-          <a href="gemini-ui/index.html">Gemini UI</a>
+          <!-- Grouped Links -->
+          <div class="dropdown">
+            <a href="#">XR Tools ▾</a>
+            <div class="dropdown-menu">
+              <a href="/Ar-studio">AR Studio</a>
+              <a href="/XR-test">XR Test</a>
+              <a href="/Ar-showcase">AR Showcase</a>
+              <a href="/vologram">Vologram</a>
+              <a href="/Terrain">Terrain</a>
+              <a href="/Workspace">Workspace</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">Apps ▾</a>
+            <div class="dropdown-menu">
+              <a href="/Assistant">Assistant</a>
+              <a href="/Video-player">Video Player</a>
+              <a href="/Browser">Browser</a>
+              <a href="/Maps">Maps</a>
+              <a href="/Menu">Menu</a>
+              <a href="/Shop">Shop</a>
+              <a href="/Gallery">Gallery</a>
+            </div>
+          </div>
+
+          <div class="dropdown">
+            <a href="#">Experiments ▾</a>
+            <div class="dropdown-menu">
+              <a href="/Beta">Beta</a>
+              <a href="/Old-chat">Old Chat</a>
+              <a href="/Gemini-copy">Gemini Copy</a>
+              <a href="/Gemini-ui">Gemini UI</a>
+            </div>
+          </div>
 
           <!-- GitHub -->
-          <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" class="md-button md-button-outlined">
+          <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" class="md-button md-button-outline">
             <span class="material-symbols-rounded">code</span>
             GitHub
           </a>
         </div>
+
+        <!-- Mobile menu toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <nav>
+      <a href="#features" onclick="toggleMobileMenu()">Features</a>
+      <a href="#creator" onclick="toggleMobileMenu()">About Chris</a>
+
+      <p style="font-weight:600; margin-top:12px;">XR Tools</p>
+      <a href="/Ar-studio" onclick="toggleMobileMenu()">AR Studio</a>
+      <a href="/XR-test" onclick="toggleMobileMenu()">XR Test</a>
+      <a href="/Ar-showcase" onclick="toggleMobileMenu()">AR Showcase</a>
+      <a href="/vologram" onclick="toggleMobileMenu()">Vologram</a>
+      <a href="/Terrain" onclick="toggleMobileMenu()">Terrain</a>
+      <a href="/Workspace" onclick="toggleMobileMenu()">Workspace</a>
+
+      <p style="font-weight:600; margin-top:12px;">Apps</p>
+      <a href="/Assistant" onclick="toggleMobileMenu()">Assistant</a>
+      <a href="/Video-player" onclick="toggleMobileMenu()">Video Player</a>
+      <a href="/Browser" onclick="toggleMobileMenu()">Browser</a>
+      <a href="/Maps" onclick="toggleMobileMenu()">Maps</a>
+      <a href="/Menu" onclick="toggleMobileMenu()">Menu</a>
+      <a href="/Shop" onclick="toggleMobileMenu()">Shop</a>
+      <a href="/Gallery" onclick="toggleMobileMenu()">Gallery</a>
+
+      <p style="font-weight:600; margin-top:12px;">Experiments</p>
+      <a href="/Beta" onclick="toggleMobileMenu()">Beta</a>
+      <a href="/Old-chat" onclick="toggleMobileMenu()">Old Chat</a>
+      <a href="/Gemini-copy" onclick="toggleMobileMenu()">Gemini Copy</a>
+      <a href="/Gemini-ui" onclick="toggleMobileMenu()">Gemini UI</a>
+
+      <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" style="margin-top:12px;">GitHub</a>
+    </nav>
+  </div>
+
+  <!-- HERO -->
   <section class="hero">
     <div class="md-container">
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1>Conversational AI<br>in Virtual Reality</h1>
-          <p>
-            Hi, I’m <strong>Chris Watt-Pringle</strong> — designer, builder, and curious experimenter.  
-            XR Home Chat is my way of exploring how we can bring AI into immersive spaces, 
-            blending creativity, code, and storytelling into one experience.
-          </p>
-          <div class="hero-buttons">
-            <a href="#demo" class="md-button" style="background:var(--orange-wheel); color:white;">Try Demo</a>
-            <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" class="md-button md-button-outlined">Get Started</a>
-          </div>
-        </div>
+      <h1>Conversational AI in Virtual Reality</h1>
+      <p>
+        Hi, I’m <strong>Chris Watt-Pringle</strong> — designer, builder, and curious experimenter.  
+        XR Optimized is my playground for blending XR, AI, and design.  
+        Step into immersive experiences and see how I imagine the future of interaction.
+      </p>
+      <div class="hero-buttons">
+        <a href="#features" class="md-button md-button-primary">Explore Features</a>
+        <a href="#creator" class="md-button md-button-outline">Meet the Creator</a>
       </div>
     </div>
   </section>
 
-  <!-- Features -->
+  <!-- FEATURES -->
   <section class="features" id="features">
     <div class="md-container">
       <div class="section-header">
@@ -318,31 +381,30 @@
         <p>Features I cared about while designing this project</p>
       </div>
       <div class="feature-grid">
-        <div class="feature-card"><h3>Immersive VR/AR</h3><p>Built with A-Frame for seamless WebXR experiences.</p></div>
-        <div class="feature-card"><h3>Real-time Voice Chat</h3><p>Natural conversations using OpenAI + WebRTC.</p></div>
-        <div class="feature-card"><h3>Streaming Text Chat</h3><p>Smooth, responsive text with instant feedback.</p></div>
-        <div class="feature-card"><h3>Edge Optimized</h3><p>Deployed on Vercel Edge for ultra-low latency.</p></div>
+        <div class="feature-card"><h3>Immersive VR/AR</h3><p>Seamless WebXR experiences with A-Frame.</p></div>
+        <div class="feature-card"><h3>Voice + Text Chat</h3><p>Realtime AI conversations with OpenAI + WebRTC.</p></div>
+        <div class="feature-card"><h3>Edge Optimized</h3><p>Global performance via Vercel Edge Runtime.</p></div>
+        <div class="feature-card"><h3>Customizable</h3><p>Tweak, remix, and design your own XR spaces.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- Creator’s Note -->
+  <!-- CREATOR -->
   <section class="creator-note" id="creator">
     <div class="md-container">
       <div class="note-content">
-        <img src="your-photo-or-avatar.png" alt="Chris Watt-Pringle" class="creator-photo">
+        <img src="your-photo-or-avatar.png" alt="Chris Watt-Pringle" class="creator-photo" />
         <div>
           <h2>From the Creator</h2>
           <p>
-            I’m Chris Watt-Pringle, and I designed XR Home Chat to merge my love of 
-            design, technology, and storytelling. This project reflects my vision of 
-            a future where conversations with AI feel alive — not just in text, but 
-            in space around us.
+            I’m Chris Watt-Pringle, and I built XR Optimized to merge my love of design, technology,  
+            and storytelling. I wanted to explore how conversations with AI could feel alive —  
+            not just on a screen, but around us in XR.
           </p>
           <p>
-            I’ve worked across cannabis, design, and XR — always chasing the edges 
-            where creativity meets tech. This site is part lab, part playground, and 
-            I hope it inspires you to build with me.
+            My background spans cannabis brands, creative design, and immersive tech.  
+            This site is part lab, part playground — a way to push at the edges of XR.  
+            I hope it inspires you to build and experiment alongside me.
           </p>
         </div>
       </div>
@@ -350,28 +412,29 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta-section">
+  <section class="cta">
     <div class="md-container">
       <h2>Ready to Build the Future?</h2>
-      <p>Join me and a growing community of developers designing next-gen XR + AI experiences</p>
-      <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" class="md-button" style="background:white; color:var(--fire-engine-red); font-weight:600;">Start Building</a>
+      <p>Join me and a growing community of creators designing next-gen XR + AI experiences.</p>
+      <a href="https://github.com/chichiwattyp2/xr-home-chat" target="_blank" class="md-button" style="background:white; color:var(--fire-engine-red);">Start Building</a>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer>
     <div class="md-container">
-      <div class="footer-content">
-        <div>
-          <h3>XR Home Chat</h3>
-          <p>An open-source experiment crafted by me, Chris Watt-Pringle.  
-          Blending AI, XR, and design — built with curiosity and plenty of coffee ☕.</p>
-        </div>
-      </div>
+      <p><strong>XR Optimized</strong> — Crafted by Chris Watt-Pringle.  
+      Blending AI, XR, and design — built with curiosity and coffee ☕.</p>
       <div class="footer-bottom">
-        <p>&copy; 2024 XR Home Chat. Created and designed by Chris Watt-Pringle. MIT License.</p>
+        <p>&copy; 2024 XR Optimized · MIT License</p>
       </div>
     </div>
   </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      document.getElementById('mobileMenu').classList.toggle('active');
+    }
+  </script>
 </body>
 </html>
