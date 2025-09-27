@@ -1,0 +1,26 @@
+# Development files
+node_modules
+.git
+.gitignore
+README.md
+.env
+.env.*
+
+# Source files (these are processed and output to public/)
+*.html
+js/*.js
+!api/*.js
+
+# Build files
+js/build.js
+package-lock.json
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Keep the build output
+!public
