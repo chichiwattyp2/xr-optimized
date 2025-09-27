@@ -1,0 +1,19 @@
+# Add these lines to your existing .gitignore file
+
+# Build cache (contains backups of original files)
+.build-cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# Dependencies
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
