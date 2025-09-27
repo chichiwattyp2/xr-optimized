@@ -166,38 +166,61 @@
             background-color: var(--md-sys-color-secondary-container);
             color: var(--md-sys-color-on-secondary-container);
         }
+/* Dropdown container */
 .menu-dropdown {
   position: relative;
 }
 
-.menu-dropdown .dropdown-content {
+/* Button styling */
+.menu-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Dropdown content */
+.dropdown-content {
   display: none;
   position: absolute;
   top: 100%;
   left: 0;
   background: #1a1a1a;
-  min-width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  min-width: 220px;
+  padding: 6px 0;
   z-index: 1000;
 }
 
-.menu-dropdown .dropdown-content li {
+/* Each menu item */
+.dropdown-content li {
   list-style: none;
 }
 
-.menu-dropdown .dropdown-content a {
+.dropdown-content a {
   display: block;
-  padding: 10px;
+  padding: 10px 16px;
   color: white;
   text-decoration: none;
+  font-size: 14px;
+  transition: background 0.2s;
 }
 
-.menu-dropdown .dropdown-content a:hover {
-  background: #333;
+.dropdown-content a:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.menu-dropdown:hover .dropdown-content {
+/* Show dropdown on hover OR when button is focused */
+.menu-dropdown:hover .dropdown-content,
+.menu-dropdown:focus-within .dropdown-content {
   display: block;
 }
+
 
 
         /* Hero Section */
