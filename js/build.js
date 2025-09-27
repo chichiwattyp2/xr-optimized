@@ -7,22 +7,24 @@ import { minify as minifyJS } from 'terser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configuration
+// Configuration for Build Output API v3
+const OUTPUT_DIR = '.vercel/output';
+const STATIC_DIR = path.join(OUTPUT_DIR, 'static');
 const SOURCE_DIR = '.';
-const BUILD_CACHE_DIR = '.build-cache';
 
-// Create backup of original files
-function backupFile(filePath) {
-    const backupPath = path.join(BUILD_CACHE_DIR, filePath);
-    const backupDir = path.dirname(backupPath);
-    
-    if (!fs.existsSync(backupDir)) {
-        fs.mkdirSync(backupDir, { recursive: true });
+// Ensure directory exists
+function ensureDirectoryExists(dir) {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
     }
-    
-    if (fs.existsSync(filePath) && !fs.existsSync(backupPath)) {
-        fs.copyFileSync(filePath, backupPath);
+}
+
+// Clean the output directory
+function cleanOutputDirectory() {
+    if (fs.existsSync(OUTPUT_DIR)) {
+        fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
     }
+    ensureDirectoryExists(STATIC_DIR);
 }
 
 // Get all HTML files from root directory
@@ -45,12 +47,42 @@ function getJSFiles() {
     ).map(file => path.join('js', file));
 }
 
-// Optimize HTML file in place
+// Copy and optimize static directories
+function copyStaticDirectories() {
+    const staticDirs = ['css', 'images', 'assets', 'fonts', 'models', 'textures'];
+    
+    staticDirs.forEach(dir => {
+        const sourcePath = path.join(SOURCE_DIR, dir);
+        const destPath = path.join(STATIC_DIR, dir);
+        
+        if (fs.existsSync(sourcePath)) {
+            copyDirectory(sourcePath, destPath);
+            console.log(`   ✔ Copied ${dir} directory`);
+        }
+    });
+}
+
+// Recursively copy directory
+function copyDirectory(source, destination) {
+    ensureDirectoryExists(destination);
+    
+    const files = fs.readdirSync(source);
+    
+    files.forEach(file => {
+        const sourcePath = path.join(source, file);
+        const destPath = path.join(destination, file);
+        
+        if (fs.statSync(sourcePath).isDirectory()) {
+            copyDirectory(sourcePath, destPath);
+        } else {
+            fs.copyFileSync(sourcePath, destPath);
+        }
+    });
+}
+
+// Optimize HTML file and copy to static directory
 async function optimizeHTML(filePath) {
     try {
-        // Backup original
-        backupFile(filePath);
-        
         const content = fs.readFileSync(filePath, 'utf8');
         
         const optimized = await minifyHTML(content, {
@@ -67,26 +99,24 @@ async function optimizeHTML(filePath) {
             useShortDoctype: true
         });
         
-        // Write optimized content back to the same file
-        fs.writeFileSync(filePath, optimized);
+        const outputPath = path.join(STATIC_DIR, path.basename(filePath));
+        fs.writeFileSync(outputPath, optimized);
         console.log(`   ✔ ${path.basename(filePath)}`);
     } catch (error) {
         console.error(`   ✗ Error optimizing ${filePath}: ${error.message}`);
-        // Leave the original file unchanged if optimization fails
+        // Copy the original file if optimization fails
+        const outputPath = path.join(STATIC_DIR, path.basename(filePath));
+        fs.copyFileSync(filePath, outputPath);
     }
 }
 
-// Optimize JavaScript file in place
+// Optimize JavaScript file and copy to static directory
 async function optimizeJS(filePath) {
     try {
         // Don't optimize API files
         if (filePath.startsWith('api/')) {
-            console.log(`   ⚠ Skipping API file: ${path.basename(filePath)}`);
             return;
         }
-        
-        // Backup original
-        backupFile(filePath);
         
         const content = fs.readFileSync(filePath, 'utf8');
         
@@ -107,18 +137,70 @@ async function optimizeJS(filePath) {
             }
         });
         
-        // Write optimized content back to the same file
-        fs.writeFileSync(filePath, result.code);
+        const outputPath = path.join(STATIC_DIR, filePath);
+        ensureDirectoryExists(path.dirname(outputPath));
+        fs.writeFileSync(outputPath, result.code);
         console.log(`   ✔ ${path.basename(filePath)}`);
     } catch (error) {
         console.error(`   ✗ Error optimizing ${filePath}: ${error.message}`);
-        // Leave the original file unchanged if optimization fails
+        // Copy the original file if optimization fails
+        const outputPath = path.join(STATIC_DIR, filePath);
+        ensureDirectoryExists(path.dirname(outputPath));
+        fs.copyFileSync(filePath, outputPath);
     }
+}
+
+// Copy other important files to static directory
+function copyRootFiles() {
+    const filesToCopy = [
+        'favicon.ico',
+        'robots.txt',
+        'manifest.json',
+        '.well-known'
+    ];
+    
+    filesToCopy.forEach(file => {
+        const sourcePath = path.join(SOURCE_DIR, file);
+        if (fs.existsSync(sourcePath)) {
+            const destPath = path.join(STATIC_DIR, file);
+            if (fs.statSync(sourcePath).isDirectory()) {
+                copyDirectory(sourcePath, destPath);
+            } else {
+                fs.copyFileSync(sourcePath, destPath);
+            }
+            console.log(`   ✔ Copied ${file}`);
+        }
+    });
+}
+
+// Create Build Output API configuration
+function createBuildConfig() {
+    const config = {
+        version: 3,
+        routes: [
+            // Serve static files with proper headers
+            {
+                src: "^/(.*)\\.(js|css|jpg|jpeg|png|gif|svg|ico|woff|woff2|ttf|eot)$",
+                headers: {
+                    "cache-control": "public, max-age=31536000, immutable"
+                }
+            },
+            // Clean URLs - serve HTML files without extension
+            { handle: "filesystem" }
+        ]
+    };
+    
+    const configPath = path.join(OUTPUT_DIR, 'config.json');
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    console.log('   ✔ Created config.json');
 }
 
 // Main build function
 async function build() {
     console.log('🚀 Starting optimized build...');
+    
+    // Clean and prepare output directory
+    cleanOutputDirectory();
     
     // Process HTML files
     console.log('📝 Optimizing HTML files...');
@@ -128,15 +210,25 @@ async function build() {
     }
     
     // Process JS files
-    console.log('⚡ Minifying JS files individually...');
+    console.log('⚡ Minifying JS files...');
     const jsFiles = getJSFiles();
     for (const file of jsFiles) {
         await optimizeJS(file);
     }
     
-    console.log('✅ Build finished.');
-    console.log('   Files have been optimized in place.');
-    console.log('   Original files backed up to .build-cache/');
+    // Copy static directories
+    console.log('📁 Copying static assets...');
+    copyStaticDirectories();
+    
+    // Copy root files
+    console.log('📄 Copying root files...');
+    copyRootFiles();
+    
+    // Create Build Output API config
+    console.log('⚙️ Creating Build Output API configuration...');
+    createBuildConfig();
+    
+    console.log('✅ Build finished. Output directory: .vercel/output/');
 }
 
 // Run build
