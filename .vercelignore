@@ -1,26 +1,26 @@
 # Development files
-node_modules
-.git
-.gitignore
-README.md
 .env
 .env.*
-
-# Source files (these are processed and output to public/)
-*.html
-js/*.js
-!api/*.js
-
-# Build files
-js/build.js
-package-lock.json
+.env.local
 
 # IDE files
 .vscode
 .idea
 *.swp
 *.swo
-.DS_Store
 
-# Keep the build output
-!public
+# Test files
+*.test.js
+*.spec.js
+
+# Documentation
+README.md
+CONTRIBUTING.md
+LICENSE
+
+# Logs
+*.log
+npm-debug.log*
+
+# The public directory will be created during build
+# Don't add exclusions for source files - they're needed for the build!
