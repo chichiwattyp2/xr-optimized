@@ -1,0 +1,9 @@
+{
+  "name": "studio",
+  "version": "1.0.0",
+  "description": "AR.js Studio is an authoring platform to build Web Augmented Reality experiences.",
+  "private": false,
+  "license": "MIT",
+  "repository": "git@github.com:AR-js-org/studio.git",
+  "homepage": "https://ar-js-org.github.io/studio/"
+}
