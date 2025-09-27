@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="theme-color" content="#ffffff">
+    <title>SuperCruisr</title>
+    <link rel="icon" href="img/icon-256.png">
+    <meta name="description" content="A progressive XR demo. Powered by SuperCruisr.">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <!-- script src="vendor/aframe-master-custom.js"></script -->
+    <!-- <script src="https://rawgit.com/aframevr/aframe/master/dist/aframe-master.js"></script> -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+      <script src="https://cdn.rawgit.com/zcanter/aframe-gradient-sky/master/dist/gradientsky.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.0/dist/aframe-extras.min.js"></script>
+    <script src="vendor/three.xr.js"></script>
+     <script src="vendor/dat.gui.min.js"></script>
+    <script src="vendor/aframe-xr.js"></script>
+    <script src="vendor/aframe-input-mapping-component.js"></script>
+    <script src="build.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+      <link rel="stylesheet" href="./pages/main/main.css" />
+  <script src="./components/back-anchor/back-anchor.js"></script>
+    <script src="./components/file-holder/file-holder.js"></script>
+    <script src="./components/file-select/file-select.js"></script>
+    <script src="./components/header/header.js"></script>
+    <script src="./components/footer/footer.js"></script>
+    <script src="./components/model-controller/model-controller.js"></script>
+     <script src="./components/header/header.js"></script>
+    <script src="./pages/main/main.js"></script>
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+  </head>
+  <body>
+ <page-header assetsUrl="assets"></page-header>
+  <div id="arui">
+      <div id="arui-step1">
+          <div id="arui-device-icon"><img src="assets/images/device-icon.png"/></div>
+          <div class="arui-text">Move around to detect a surface</div>
+      </div>
+      <div id="arui-step2">
+          <div class="arui-text">Tap to place</div>
+      </div>
+    </div>
+    <div id="container">
+      
+      <div id="body">
+        <div id="upperSheet">
+          <div id="visualSheet">
+              <div id="thumbs">
+                <div id="thumb0" class="thumb"><img src="assets/images/thumbs-0-0-0.png"/></div>
+                <div id="thumb1" class="thumb"><img src="assets/images/thumbs-0-0-1.png"/></div>
+                <div id="thumb2" class="thumb last selected"><img src="assets/images/thumbs-0-0-2.png"/></div>
+              </div>
+              
+              
+              
+              
+              <div id="content3D">
+                <a-scene embedded xr="arAutostart: false" vr-mode-ui="enabled: true"
+      loading-screen="backgroundColor: white"
+      background="color: black">
+                  <a-assets>
+                   <a-asset-item
+          id="lego"
+          src="https://cdn.glitch.com/6b28578f-d32d-4827-b37d-986c31d59a4a%2Flego.glb"
+        ></a-asset-item>
+                    <img id="skymap" src="assets/images/sky.jpg" crossorigin="anonymous">
+                    <img id="floor" src="assets/images/floor.jpg" crossorigin="anonymous">
+                  </a-assets>
+                  <a-light type="point" light="color: #fff; intensity:0.5" position="3 10 1"></a-light>
+                  <a-light type="point" light="color: #fff; intensity:0.1" position="-3 10 0"></a-light>
+                  <a-light type="hemisphere" groundColor="#888" intensity="0.8"></a-light>
+            
+                  <a-entity id="ground"
+                            geometry="primitive: box; width: 12; height: 0.01; depth: 12"
+                            material="shader:flat; src: #floor" xr="ar: true">
+                          </a-entity>
+                  <a-entity id="cameraRig">
+                    <!-- camera -->
+                    <a-entity id="acamera" camera position="0 1.2 0" look-controls></a-entity>
+                    <!-- hand controls -->
+                    <a-entity id="left-hand" store-controls="hand: left" laser-controls="hand: left" raycaster="objects: .collidable" xr="ar: false"></a-entity>
+                    <a-entity id="right-hand" store-controls="hand: right" laser-controls="hand: right" raycaster="objects: .collidable" line="color: #118A7E" xr="ar: false"></a-entity>
+                  </a-entity>
+                  <!-- Meshes -->
+                  <a-entity class="collidable" id="meshContainer" position="0 0.75 -1.75">
+                    <a-entity id="geo0" geometry="primitive: plane; width: 3.2; height: 1.8;" material="transparent: true; opacity: 0.3; color: #66ca9c" rotation="0 0 0" visible="true"></a-entity>
+                    <a-gltf-model id="geo1" src="#lego" scale="0.25 0.25 0.25" position="-1 -0.77 -2" animation-mixer="" visible="false"></a-gltf-model>
+                    <a-entity id="geo2" geometry="primitive: icosahedron; radius: 0.7;" rotation="0 15 0" material="transparent: true; opacity: 0.3; color: #66ca9c" visible="false"></a-entity>
+                </a-entity>
+                  <a-gradient-sky radius="30" phiLength="360" phiStart="0" thetaLength="90" xr="ar: true" material="side: double; shader: gradient; topColor: 255 235 190 84; bottomColor: 87 249 190 82;"></a-gradient-sky>
+                  
+                  <a-entity id="skyFloor" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90; thetaStart: 90" material="shader:flat; color: white; side:back; height:2048; width:2048" xr="ar: true"></a-entity>
+                  <a-entity reticle geometry="primitive: ring; radiusInner: 0.04; radiusOuter: 0.05" material="color: #ffffff"></a-entity>
+                </a-scene>
+              </div>
+            </div>
+            <div id="productOptions">
+              <div class="productOption">
+                <div class="productOptionTitle">
+                  Content
+                </div>
+                <div class="productOptionThumbs">
+                  <ul>
+                    <li id="shape0" class="optionSelected">
+                        <img src="assets/images/shape0.png"/>
+                    </li>
+                    <li id="shape1">
+                        <img src="assets/images/shape1.png"/>
+                    </li>
+                    <li id="shape2">
+                        <img src="assets/images/shape2.png"/>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="productOption">
+                <div class="productOptionTitle">
+                  Color
+                </div>
+                <div class="productOptionThumbs">
+                  <ul>
+                    <li id="color0" class="optionSelected">
+                        <img src="assets/images/color0.png"/>
+                    </li>
+                    <li id="color1">
+                        <img src="assets/images/color1.png"/>
+                    </li>
+                    <li id="color2">
+                        <img src="assets/images/color2.png"/>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        <!--div id="sheet">
+          <div id="brand">
+             SuperCruisr
+          </div>
+          <div id="productName">
+              Basic Mesh
+          </div>
+         
+          <div id="buttonCart">Add to Cart</div>
+         
+          </div -->
+        
+      
+      <div class="content">
+        <p class="title">Web-enabled AR/VR experiences</p>
+        <p class="paragraph">
+        
+        </p>
+
+       
+
+        <p class="lead">Pick your project type</p>
+
+        <div>
+          <label class="radio-container paragraph">
+            <span class="radio-title">Location-based</span>
+            <input
+              id="location"
+              type="radio"
+              name="radio"
+              onclick="radioOnclick(this)"
+            />
+            <span>
+                Place your creation on a map, so it remains tied to a physical location.
+            </span>
+            <span class="checkmark"></span>
+          </label>
+
+          <label class="radio-container paragraph">
+            <span class="radio-title">Marker-based</span>
+            <input
+              id="marker"
+              type="radio"
+              name="radio"
+              onclick="radioOnclick(this)"
+            />
+            <span>
+                Connect your creation to a visual marker, which can be moved to any location.
+            </span>
+            <span class="checkmark"></span>
+          </label>
+
+          <div class="buttons-container">
+              <a onclick="anchorOnclick(this)" id="start-building" class="primary-button">Start building</a>
+             
+          </div>
+          <div id="error" class="error" style="visibility: hidden;">
+            Please, select a project type.
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+   
+  </body>
+</html>

@@ -1,0 +1,253 @@
+/* Google fonts */
+@import url("https://fonts.googleapis.com/css?family=Chakra+Petch&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap");
+
+/* Color Variables */
+:root {
+  --primary-color: #e10600;          /* Bold, modern red */
+  --primary-color-dark: #b10000;     /* Deep dark red */
+  --secondary-color: #000000;        /* Black */
+  --secondary-color-dark: #191919;   /* Off-black for subtle depth */
+  --passive-color: #ffffff;          /* White for clean backgrounds */
+  --passive-color-dark: #f2f2f2;     /* Light grey for cards, hover, etc. */
+  --link-color: #e10600;             /* Red links to match brand */
+  --max-z-index: 99999;
+
+  /* Contrast text colors */
+  --text-on-primary: #ffffff;
+  --text-on-secondary: #ffffff;
+  --text-on-passive: #000000;
+}
+
+/* Typography */
+.title {
+  font-family: Chakra Petch;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 3em;
+  color: var(--text-on-passive);  /* Assumes white background by default */
+}
+
+.bold {
+    font-weight: bold;
+    color: var(--link-color);
+}
+
+.lead {
+  font-family: Chakra Petch;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1.75em;
+  line-height: 140%;
+  color: var(--text-on-passive);  /* Assumes white background by default */
+}
+
+.paragraph,
+.small,
+.link,
+.error {
+  font-family: Source Sans Pro;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 140%;
+}
+
+.paragraph {
+  font-size: 1em;
+  color: var(--text-on-passive);
+}
+
+.small {
+  font-size: 0.875em;
+  color: var(--text-on-passive);
+}
+
+.link {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.error {
+  font-style: italic;
+  font-size: 1em;
+  color: #df0000;
+}
+
+/* Buttons */
+.primary-button,
+.secondary-button,
+.passive-button {
+  display: inline-block;
+  font-family: Chakra Petch;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: 1.25em;
+  height: 3.5em;
+  border: 1.5px solid black;
+  box-sizing: border-box;
+  box-shadow: 10px 10px 0px black;
+  border-radius: 10px;
+  padding: 1em 1.25em;
+  margin: 1.875em 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* -- Fixed button text colors for contrast -- */
+.primary-button {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.primary-button:hover {
+  background: var(--primary-color-dark);
+  color: var(--text-on-primary);
+}
+
+.secondary-button {
+  background: var(--secondary-color);
+  color: var(--text-on-secondary);
+}
+
+.secondary-button:hover {
+  background: var(--secondary-color-dark);
+  color: var(--text-on-secondary);
+}
+
+.passive-button {
+  background: var(--passive-color);
+  color: var(--text-on-passive);
+}
+
+.passive-button:hover {
+  background: var(--passive-color-dark);
+  color: var(--text-on-passive);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.passive-button:active {
+  box-shadow: 5px 5px 0px #000000;
+  transform: translateY(4px);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* body */
+body {
+  margin: 0;
+  background: var(--passive-color);
+  color: var(--text-on-passive);
+}
+
+hr {
+  margin: 2.25em 0.625em;
+  border: 1px solid var(--passive-color);
+}
+
+/* -- Ensure header/footer text is visible -- */
+page-header {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  background: var(--passive-color);
+  z-index: var(--max-z-index);
+  color: var(--text-on-passive);
+}
+
+page-footer {
+  position: absolute;
+  background: var(--secondary-color);
+  width: 100%;
+  color: var(--text-on-secondary);
+}
+
+.pages-content {
+  font-family: Source Sans Pro;
+  padding: 4em 12vw;
+  color: var(--text-on-passive);
+}
+
+.pages-content-container {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2em;
+}
+
+.pages-content-element {
+  width: 50%;
+  padding: 1em;
+  max-width: 30em;
+  margin-right: 1em;
+  color: var(--text-on-passive);
+}
+
+/* TODO: move this to location.css */
+.pages-content-element .lead {
+  margin-top: 0;
+}
+
+/* TODO: move this to location.css */
+.pages-content-container:first-of-type {
+  margin-bottom: 2.25em;
+}
+
+/* TODO: resolve duplicate conflict. move this to the back-anchor component. */
+.back-anchor {
+  padding: 1em 0em;
+  height: 3rem;
+  color: var(--link-color);
+}
+.coordinates-input-wrapper {
+  margin-bottom: 1rem;
+}
+
+.back-anchor {
+  padding: 1em;
+  font-size: 1em;
+  color: var(--link-color);
+}
+
+/* TODO: move .coordinates-input-container to location.css */
+.coordinates-input-container {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.coordinates-input-container .input-number-tags {
+    padding-left: 0;
+}
+
+.add-location-container {
+    width: fit-content;
+    cursor: pointer;
+}
+
+.coordinates-input-container > div {
+  padding: 1rem;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  text-align: justify;
+}
+
+.delete-coordinates-container > svg {
+  margin-top: 2.5rem;
+}
+
+.remove-location-container {
+    display: flex;
+    cursor: pointer;
+}
+
+.add-location-container {
+  display: flex;
+}
+
+.add-location-icon {
+  margin-right: 0.
