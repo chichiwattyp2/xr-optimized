@@ -87,7 +87,293 @@ class ChatMessagePool {
 }
 
 window.ChatMessagePool = ChatMessagePool;`,
-    // ... rest of your files unchanged ...
+
+    'src/optimizations/apiClient.js': `// Essential API client with retry logic
+class EnhancedAPIClient {
+    constructor() {
+        this.requestQueue = [];
+        this.isProcessing = false;
+        this.stats = { totalRequests: 0, failedRequests: 0 };
+        console.log('🌐 Enhanced API client enabled');
+    }
+    
+    async makeRequest(endpoint, options = {}, retries = 3) {
+        this.stats.totalRequests++;
+        let lastError;
+        
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const response = await fetch("/api" + endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error("HTTP " + response.status + ": " + response.statusText);
+                }
+                
+                return await response.json();
+                
+            } catch (error) {
+                lastError = error;
+                
+                if (attempt < retries) {
+                    const delay = Math.pow(2, attempt) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+        
+        this.stats.failedRequests++;
+        throw new Error("Request failed after " + (retries + 1) + " attempts: " + lastError.message);
+    }
+    
+    async *streamChat(messages) {
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages, stream: true })
+            });
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
+            
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\\n');
+                buffer = lines.pop() || '';
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.slice(6);
+                        if (data === '[DONE]') return;
+                        
+                        try {
+                            yield JSON.parse(data);
+                        } catch (e) {
+                            console.warn('Failed to parse SSE data');
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Streaming error:', error);
+            throw error;
+        }
+    }
+    
+    getStats() {
+        return { ...this.stats };
+    }
+}
+
+window.EnhancedAPIClient = EnhancedAPIClient;
+window.apiClient = new EnhancedAPIClient();`,
+
+    'build.js': `#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const { minify } = require('terser');
+
+console.log('🚀 Building optimized XR Home Chat...');
+
+// Create dist directory
+if (!fs.existsSync('dist')) {
+    fs.mkdirSync('dist', { recursive: true });
+}
+
+// Copy and optimize HTML
+const html = fs.readFileSync('index.html', 'utf8');
+const optimizedHtml = html
+    .replace(/\\s+/g, ' ')
+    .replace(/<!--[\\s\\S]*?-->/g, '');
+
+fs.writeFileSync('dist/index.html', optimizedHtml);
+
+// Combine and minify JavaScript
+const jsFiles = [
+    'src/optimizations/chatPool.js',
+    'src/optimizations/apiClient.js',
+    'client.js'
+];
+
+let combinedJs = '';
+
+jsFiles.forEach(file => {
+    if (fs.existsSync(file)) {
+        combinedJs += fs.readFileSync(file, 'utf8') + '\\n';
+    }
+});
+
+// Add initialization code (safe concatenation)
+combinedJs += "\n// Auto-initialize optimizations\n" +
+"document.addEventListener('DOMContentLoaded', () => {\n" +
+"    if (window.ChatMessagePool) {\n" +
+"        window.messagePool = new ChatMessagePool();\n" +
+"    }\n\n" +
+"    const scene = document.querySelector('a-scene');\n" +
+"    if (scene) {\n" +
+"        scene.addEventListener('loaded', () => {\n" +
+"            console.log('✅ XR optimizations active');\n" +
+"        });\n" +
+"    }\n" +
+"});\n";
+
+// Minify JavaScript
+minify(combinedJs, {
+    compress: {
+        dead_code: true,
+        drop_console: false
+    },
+    mangle: true
+}).then(result => {
+    fs.writeFileSync('dist/client.min.js', result.code);
+    console.log('✅ JavaScript optimized and minified');
+    
+    // Update HTML to use minified JS
+    const updatedHtml = optimizedHtml.replace(
+        'client.js',
+        'client.min.js'
+    );
+    fs.writeFileSync('dist/index.html', updatedHtml);
+    
+}).catch(error => {
+    console.error('Minification failed:', error);
+    // Fallback: copy unminified
+    fs.writeFileSync('dist/client.js', combinedJs);
+});
+
+// Copy API files
+if (fs.existsSync('api')) {
+    const apiDir = path.join('dist', 'api');
+    if (!fs.existsSync(apiDir)) {
+        fs.mkdirSync(apiDir);
+    }
+    
+    fs.readdirSync('api').forEach(file => {
+        fs.copyFileSync(
+            path.join('api', file),
+            path.join(apiDir, file)
+        );
+    });
+    console.log('✅ API files copied');
+}
+
+console.log('\\n🎉 Build complete! Files ready in dist/ directory');`,
+
+    'package.json': `{
+  "name": "xr-home-chat",
+  "version": "1.0.0",
+  "description": "XR Home Chat with performance optimizations",
+  "main": "client.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "node build.js",
+    "build:production": "NODE_ENV=production node build.js",
+    "deploy": "npm run build && vercel --prod",
+    "test": "echo \\"Tests would run here\\"",
+    "check-env": "node -e \\"console.log('Environment check:', process.env.OPENAI_API_KEY ? '✅ API key set' : '❌ API key missing')\\""
+  },
+  "dependencies": {
+    "aframe": "^1.4.0"
+  },
+  "devDependencies": {
+    "terser": "^5.24.0",
+    "clean-css": "^5.3.2",
+    "html-minifier-terser": "^7.2.0"
+  },
+  "keywords": ["vr", "ar", "webxr", "aframe", "openai"],
+  "author": "",
+  "license": "MIT"
+}`,
+
+    'vercel.json': `{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "functions": {
+    "api/chat.js": {
+      "maxDuration": 30
+    },
+    "api/realtime-token.js": {
+      "maxDuration": 10
+    },
+    "api/health.js": {
+      "maxDuration": 5
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Content-Security-Policy", 
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://aframe.io; connect-src 'self' https://api.openai.com wss://api.openai.com;"
+        }
+      ]
+    }
+  ]
+}`,
+
+    '.env.example': `# OpenAI API Configuration
+OPENAI_API_KEY=sk-proj-your-key-here
+OPENAI_MODEL_TEXT=gpt-4o-mini
+OPENAI_MODEL_REALTIME=gpt-4o-realtime-preview
+
+# Environment
+NODE_ENV=production`,
+
+    'README.md': `# 🚀 XR Home Chat - Optimized
+
+VR/AR chat application with performance optimizations.
+
+## Quick Start
+
+1. Install dependencies:
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+2. Set up environment:
+   \`\`\`bash
+   cp .env.example .env.local
+   # Add your OpenAI API key
+   \`\`\`
+
+3. Build and deploy:
+   \`\`\`bash
+   npm run build
+   npm run deploy
+   \`\`\`
+
+## Features
+
+- ✅ Performance optimizations
+- ✅ Chat message pooling  
+- ✅ API retry logic
+- ✅ Build optimization
+- ✅ VR/AR support
+
+## Commands
+
+- \`npm run dev\` - Development server
+- \`npm run build\` - Build for production
+- \`npm run deploy\` - Deploy to Vercel
+- \`npm run check-env\` - Check environment setup`
 };
 
 // Write all files
