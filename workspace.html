@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Workspace - XR Labs</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="nav.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            background: #0a0a0f;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        
+        .workspace-ui {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(26, 26, 36, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1rem 2rem;
+            color: white;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .workspace-btn {
+            background: linear-gradient(135deg, #00d4ff, #8b5cf6);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .workspace-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+        
+        .beta-banner {
+            position: fixed;
+            top: 80px;
+            right: 2rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="beta-banner">
+        🚧 Beta Version - Features in Development
+    </div>
+
+    <a-scene 
+        background="color: #0a0a0f"
+        vr-mode-ui="enabled: true"
+        device-orientation-permission-ui="enabled: true">
+        
+        <!-- Assets -->
+        <a-assets>
+            <a-mixin id="desk-material" material="color: #4a5568; roughness: 0.7; metalness: 0.1"></a-mixin>
+            <a-mixin id="screen-material" material="color: #1a202c; emissive: #1a202c; emissiveIntensity: 0.1"></a-mixin>
+            <a-mixin id="ui-panel" geometry="primitive: plane; width: 2; height: 1.5" 
+                     material="color: #1a1a24; opacity: 0.9; transparent: true"></a-mixin>
+        </a-assets>
+
+        <!-- Lighting -->
+        <a-light type="ambient" color="#404040" intensity="0.4"></a-light>
+        <a-light type="directional" position="2 4 2" color="#ffffff" intensity="0.6" castShadow="true"></a-light>
+        <a-light type="point" position="0 3 0" color="#00d4ff" intensity="0.3"></a-light>
+
+        <!-- Environment -->
+        <a-sky color="#0a0a0f"></a-sky>
+        
+        <!-- Floor -->
+        <a-plane 
+            position="0 0 0" 
+            rotation="-90 0 0" 
+            width="20" 
+            height="20" 
+            color="#1a1a24" 
+            shadow="receive: true">
+        </a-plane>
+
+        <!-- Workspace Desk -->
+        <a-box 
+            mixin="desk-material"
+            position="0 0.75 -2" 
+            width="3" 
+            height="0.1" 
+            depth="1.5"
+            shadow="cast: true; receive: true">
+        </a-box>
+
+        <!-- Virtual Screens -->
+        <a-entity id="screen-setup" position="0 1.5 -2.5">
+            <!-- Main Screen -->
+            <a-plane 
+                mixin="screen-material"
+                position="0 0 0" 
+                width="2.5" 
+                height="1.4"
+                shadow="cast: true">
+                <a-text 
+                    value="Virtual Desktop 1\n\n📊 Dashboard\n📈 Analytics\n📁 Files\n⚙️ Settings"
+                    align="center"
+                    position="0 0 0.01"
+                    color="#00d4ff"
+                    width="4">
+                </a-text>
+            </a-plane>
+
+            <!-- Side Screen -->
+            <a-plane 
+                mixin="screen-material"
+                position="2.2 -0.2 0.2" 
+                rotation="0 -15 0"
+                width="1.8" 
+                height="1.1"
+                shadow="cast: true">
+                <a-text 
+                    value="Chat & Communication\n\n💬 Team Chat\n📞 Video Calls\n📧 Email\n📅 Calendar"
+                    align="center"
+                    position="0 0 0.01"
+                    color="#8b5cf6"
+                    width="4">
+                </a-text>
+            </a-plane>
+
+            <!-- Code Editor Screen -->
+            <a-plane 
+                mixin="screen-material"
+                position="-2.2 -0.2 0.2" 
+                rotation="0 15 0"
+                width="1.8" 
+                height="1.1"
+                shadow="cast: true">
+                <a-text 
+                    value="Code Editor\n\nfunction workspace() {\n  return 'VR Ready!';\n}\n\n// TODO: Add features"
+                    align="center"
+                    position="0 0 0.01"
+                    color="#10b981"
+                    width="3"
+                    font="monospace">
+                </a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Floating UI Panel -->
+        <a-entity id="ui-panel" position="3 2 -1" rotation="0 -30 0">
+            <a-plane 
+                mixin="ui-panel">
+                <a-text 
+                    value="Workspace Controls\n\n🔧 Tools\n📱 Apps\n👥 Collaborate\n🎥 Share Screen"
+                    align="center"
+                    position="0 0 0.01"
+                    color="white"
+                    width="6">
+                </a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Virtual Keyboard -->
+        <a-entity id="virtual-keyboard" position="0 1 -1.2" rotation="-15 0 0">
+            <a-plane 
+                width="2" 
+                height="0.8" 
+                color="#2a2a3a" 
+                shadow="cast: true">
+                <a-text 
+                    value="⌨️ Virtual Keyboard\nQWERTY Layout\n\nClick to type..."
+                    align="center"
+                    position="0 0 0.01"
+                    color="#a1a1aa"
+                    width="6">
+                </a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Meeting Room Area -->
+        <a-entity id="meeting-area" position="6 0 -3">
+            <a-cylinder 
+                position="0 0.1 0" 
+                radius="2" 
+                height="0.2" 
+                color="#1a1a24"
+                shadow="cast: true; receive: true">
+            </a-cylinder>
+            
+            <!-- Meeting Table -->
+            <a-cylinder 
+                position="0 0.8 0" 
+                radius="1.5" 
+                height="0.05" 
+                color="#4a5568">
+            </a-cylinder>
+
+            <!-- Chairs -->
+            <a-box position="0 0.5 1.2" width="0.4" height="0.8" depth="0.4" color="#6b7280"></a-box>
+            <a-box position="1.2 0.5 0" width="0.4" height="0.8" depth="0.4" color="#6b7280"></a-box>
+            <a-box position="0 0.5 -1.2" width="0.4" height="0.8" depth="0.4" color="#6b7280"></a-box>
+            <a-box position="-1.2 0.5 0" width="0.4" height="0.8" depth="0.4" color="#6b7280"></a-box>
+
+            <!-- Meeting Screen -->
+            <a-plane 
+                position="0 2 -2.5" 
+                width="3" 
+                height="1.8" 
+                color="#1a202c">
+                <a-text 
+                    value="Meeting Room\n\n👥 Participants: 0/8\n📹 Video: Ready\n🎤 Audio: Ready\n📱 Share Screen"
+                    align="center"
+                    position="0 0 0.01"
+                    color="#00d4ff"
+                    width="4">
+                </a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- Interactive Elements -->
+        <a-entity id="interactive-tools" position="-4 1.5 -2">
+            <!-- Whiteboard -->
+            <a-plane 
+                width="2.5" 
+                height="1.8" 
+                color="white" 
+                position="0 0 0">
+                <a-text 
+                    value="Digital Whiteboard\n\n✏️ Draw Ideas\n📝 Notes\n🎨 Collaborate\n💡 Brainstorm"
+                    align="center"
+                    position="0 0 0.01"
+                    color="#1a1a24"
+                    width="4">
+                </a-text>
+            </a-plane>
+        </a-entity>
+
+        <!-- User Avatar Area -->
+        <a-sphere 
+            id="user-avatar"
+            position="0 1.7 -0.5" 
+            radius="0.2" 
+            color="#00d4ff"
+            animation="property: rotation; to: 0 360 0; loop: true; dur: 10000">
+            <a-text 
+                value="You"
+                position="0 -0.4 0"
+                align="center"
+                color="white"
+                width="8">
+            </a-text>
+        </a-sphere>
+
+        <!-- Camera rig -->
+        <a-entity id="rig" position="0 1.6 1">
+            <a-camera 
+                id="camera"
+                look-controls="enabled: true"
+                wasd-controls="enabled: true"
+                cursor="rayOrigin: mouse; fuse: false"
+                raycaster="objects: .clickable">
+                
+                <!-- VR Controllers -->
+                <a-entity
+                    id="leftHand"
+                    hand-controls="hand: left; handModelStyle: lowPoly; color: #15803d"
+                    laser-controls="hand: left"
+                    raycaster="objects: .clickable; lineColor: #00d4ff; lineOpacity: 0.5">
+                </a-entity>
+                
+                <a-entity
+                    id="rightHand"
+                    hand-controls="hand: right; handModelStyle: lowPoly; color: #15803d"
+                    laser-controls="hand: right"
+                    raycaster="objects: .clickable; lineColor: #00d4ff; lineOpacity: 0.5">
+                </a-entity>
+            </a-camera>
+        </a-entity>
+    </a-scene>
+
+    <div class="workspace-ui">
+        <span>🏢 Virtual Workspace</span>
+        <button class="workspace-btn" onclick="joinMeeting()">Join Meeting</button>
+        <button class="workspace-btn" onclick="shareScreen()">Share Screen</button>
+        <button class="workspace-btn" onclick="openApp('whiteboard')">Whiteboard</button>
+        <button class="workspace-btn" onclick="toggleTools()">Tools</button>
+    </div>
+
+    <script>
+        // Workspace functionality
+        function joinMeeting() {
+            const meetingArea = document.querySelector('#meeting-area');
+            const camera = document.querySelector('#rig');
+            
+            // Animate camera to meeting area
+            camera.setAttribute('animation', {
+                property: 'position',
+                to: '6 1.6 0',
+                dur: 2000,
+                easing: 'easeInOutQuad'
+            });
+            
+            console.log('Joining virtual meeting...');
+            
+            // Update meeting status
+            setTimeout(() => {
+                const meetingScreen = meetingArea.querySelector('a-text');
+                meetingScreen.setAttribute('text', 'value', 
+                    'Meeting Room\\n\\n👥 Participants: 1/8\\n📹 Video: Active\\n🎤 Audio: Active\\n📱 Screen Sharing'
+                );
+            }, 2000);
+        }
+
+        function shareScreen() {
+            const screens = document.querySelectorAll('#screen-setup a-plane');
+            screens.forEach(screen => {
+                screen.setAttribute('animation', {
+                    property: 'scale',
+                    to: '1.1 1.1 1.1',
+                    dur: 500,
+                    direction: 'alternate',
+                    loop: 2
+                });
+            });
+            
+            console.log('Screen sharing activated');
+        }
+
+        function openApp(appName) {
+            const panel = document.querySelector('#ui-panel');
+            
+            switch(appName) {
+                case 'whiteboard':
+                    panel.setAttribute('animation', {
+                        property: 'position',
+                        to: '-4 2 -1',
+                        dur: 1000
+                    });
+                    break;
+                default:
+                    console.log(`Opening ${appName}...`);
+            }
+        }
+
+        function toggleTools() {
+            const tools = document.querySelector('#interactive-tools');
+            const currentPos = tools.getAttribute('position');
+            const isVisible = currentPos.y > 0;
+            
+            tools.setAttribute('animation', {
+                property: 'position',
+                to: isVisible ? '-4 -2 -2' : '-4 1.5 -2',
+                dur: 800
+            });
+        }
+
+        // Interactive click handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            const screens = document.querySelectorAll('#screen-setup a-plane');
+            
+            screens.forEach((screen, index) => {
+                screen.classList.add('clickable');
+                screen.addEventListener('click', () => {
+                    console.log(`Screen ${index + 1} clicked`);
+                    screen.setAttribute('animation', {
+                        property: 'scale',
+                        to: '1.05 1.05 1.05',
+                        dur: 200,
+                        direction: 'alternate',
+                        loop: 2
+                    });
+                });
+            });
+
+            // Add floating animation to UI panel
+            const uiPanel = document.querySelector('#ui-panel');
+            uiPanel.setAttribute('animation', {
+                property: 'rotation',
+                to: '0 -32 0',
+                dur: 4000,
+                direction: 'alternate',
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+
+            console.log('🏢 Virtual Workspace loaded');
+            console.log('💡 Click screens to interact');
+            console.log('🎮 Use VR controllers or mouse to navigate');
+        });
+
+        // Performance optimization
+        window.addEventListener('load', () => {
+            if (window.xrOptimizer) {
+                console.log('Workspace optimizations active');
+            }
+        });
+    </script>
+</body>
+</html>
