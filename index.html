@@ -366,5 +366,12 @@
             lastScrollY = currentScrollY;
         });
     </script>
+          <script>
+  document.querySelectorAll('.menu-dropdown .dropdown-content a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelector('.dropdown-content').style.display = 'none';
+    });
+  });
+</script>
 </body>
 </html>
