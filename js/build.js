@@ -8,22 +8,21 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const OUTPUT_DIR = 'public';
 const SOURCE_DIR = '.';
+const BUILD_CACHE_DIR = '.build-cache';
 
-// Ensure output directory exists
-function ensureDirectoryExists(dir) {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
+// Create backup of original files
+function backupFile(filePath) {
+    const backupPath = path.join(BUILD_CACHE_DIR, filePath);
+    const backupDir = path.dirname(backupPath);
+    
+    if (!fs.existsSync(backupDir)) {
+        fs.mkdirSync(backupDir, { recursive: true });
     }
-}
-
-// Clean the output directory
-function cleanOutputDirectory() {
-    if (fs.existsSync(OUTPUT_DIR)) {
-        fs.rmSync(OUTPUT_DIR, { recursive: true, force: true });
+    
+    if (fs.existsSync(filePath) && !fs.existsSync(backupPath)) {
+        fs.copyFileSync(filePath, backupPath);
     }
-    ensureDirectoryExists(OUTPUT_DIR);
 }
 
 // Get all HTML files from root directory
@@ -41,46 +40,17 @@ function getJSFiles() {
     const files = fs.readdirSync(jsDir);
     return files.filter(file => 
         file.endsWith('.js') && 
-        file !== 'build.js' // Don't process the build script itself
+        file !== 'build.js' && // Don't process the build script itself
+        file !== 'build_optimization.js' // Don't process optimization scripts
     ).map(file => path.join('js', file));
 }
 
-// Copy static directories (css, images, assets, etc.)
-function copyStaticDirectories() {
-    const staticDirs = ['css', 'images', 'assets', 'fonts', 'models', 'textures'];
-    
-    staticDirs.forEach(dir => {
-        const sourcePath = path.join(SOURCE_DIR, dir);
-        const destPath = path.join(OUTPUT_DIR, dir);
-        
-        if (fs.existsSync(sourcePath)) {
-            copyDirectory(sourcePath, destPath);
-            console.log(`   ✔ Copied ${dir} directory`);
-        }
-    });
-}
-
-// Recursively copy directory
-function copyDirectory(source, destination) {
-    ensureDirectoryExists(destination);
-    
-    const files = fs.readdirSync(source);
-    
-    files.forEach(file => {
-        const sourcePath = path.join(source, file);
-        const destPath = path.join(destination, file);
-        
-        if (fs.statSync(sourcePath).isDirectory()) {
-            copyDirectory(sourcePath, destPath);
-        } else {
-            fs.copyFileSync(sourcePath, destPath);
-        }
-    });
-}
-
-// Optimize HTML file
+// Optimize HTML file in place
 async function optimizeHTML(filePath) {
     try {
+        // Backup original
+        backupFile(filePath);
+        
         const content = fs.readFileSync(filePath, 'utf8');
         
         const optimized = await minifyHTML(content, {
@@ -97,20 +67,27 @@ async function optimizeHTML(filePath) {
             useShortDoctype: true
         });
         
-        const outputPath = path.join(OUTPUT_DIR, path.basename(filePath));
-        fs.writeFileSync(outputPath, optimized);
+        // Write optimized content back to the same file
+        fs.writeFileSync(filePath, optimized);
         console.log(`   ✔ ${path.basename(filePath)}`);
     } catch (error) {
         console.error(`   ✗ Error optimizing ${filePath}: ${error.message}`);
-        // Copy the original file if optimization fails
-        const outputPath = path.join(OUTPUT_DIR, path.basename(filePath));
-        fs.copyFileSync(filePath, outputPath);
+        // Leave the original file unchanged if optimization fails
     }
 }
 
-// Optimize JavaScript file
+// Optimize JavaScript file in place
 async function optimizeJS(filePath) {
     try {
+        // Don't optimize API files
+        if (filePath.startsWith('api/')) {
+            console.log(`   ⚠ Skipping API file: ${path.basename(filePath)}`);
+            return;
+        }
+        
+        // Backup original
+        backupFile(filePath);
+        
         const content = fs.readFileSync(filePath, 'utf8');
         
         const result = await minifyJS(content, {
@@ -130,58 +107,18 @@ async function optimizeJS(filePath) {
             }
         });
         
-        const outputPath = path.join(OUTPUT_DIR, filePath);
-        ensureDirectoryExists(path.dirname(outputPath));
-        fs.writeFileSync(outputPath, result.code);
+        // Write optimized content back to the same file
+        fs.writeFileSync(filePath, result.code);
         console.log(`   ✔ ${path.basename(filePath)}`);
     } catch (error) {
         console.error(`   ✗ Error optimizing ${filePath}: ${error.message}`);
-        // Copy the original file if optimization fails
-        const outputPath = path.join(OUTPUT_DIR, filePath);
-        ensureDirectoryExists(path.dirname(outputPath));
-        fs.copyFileSync(filePath, outputPath);
+        // Leave the original file unchanged if optimization fails
     }
-}
-
-// Copy API directory (serverless functions)
-function copyAPIDirectory() {
-    const apiSource = path.join(SOURCE_DIR, 'api');
-    
-    if (fs.existsSync(apiSource)) {
-        // Don't copy to public - API stays in root for Vercel
-        console.log('   ℹ API directory will be handled by Vercel directly');
-    }
-}
-
-// Copy other important files
-function copyRootFiles() {
-    const filesToCopy = [
-        'favicon.ico',
-        'robots.txt',
-        'manifest.json',
-        '.well-known'
-    ];
-    
-    filesToCopy.forEach(file => {
-        const sourcePath = path.join(SOURCE_DIR, file);
-        if (fs.existsSync(sourcePath)) {
-            const destPath = path.join(OUTPUT_DIR, file);
-            if (fs.statSync(sourcePath).isDirectory()) {
-                copyDirectory(sourcePath, destPath);
-            } else {
-                fs.copyFileSync(sourcePath, destPath);
-            }
-            console.log(`   ✔ Copied ${file}`);
-        }
-    });
 }
 
 // Main build function
 async function build() {
     console.log('🚀 Starting optimized build...');
-    
-    // Clean and prepare output directory
-    cleanOutputDirectory();
     
     // Process HTML files
     console.log('📝 Optimizing HTML files...');
@@ -197,15 +134,9 @@ async function build() {
         await optimizeJS(file);
     }
     
-    // Copy static directories
-    console.log('📁 Copying static assets...');
-    copyStaticDirectories();
-    
-    // Copy root files
-    console.log('📄 Copying root files...');
-    copyRootFiles();
-    
-    console.log('✅ Build finished. Output directory: public/');
+    console.log('✅ Build finished.');
+    console.log('   Files have been optimized in place.');
+    console.log('   Original files backed up to .build-cache/');
 }
 
 // Run build
