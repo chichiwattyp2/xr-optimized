@@ -1,28 +1,31 @@
 {
-  "name": "xr-home-chat",
-  "version": "1.0.0",
-  "description": "XR Home Chat with performance optimizations",
-  "main": "client.js",
+  "name": "xr-optimized",
+  "version": "2.0.0",
+  "description": "XR-optimized web application with build optimization",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
+    "build": "node js/build.js",
     "dev": "vercel dev",
-    "build": "node build.js",
-    "build:production": "NODE_ENV=production node build.js",
-    "deploy": "npm run build && vercel --prod",
-    "test": "echo \"Tests would run here\"",
-    "check-env": "node -e \"console.log('Environment check:', process.env.OPENAI_API_KEY ? '✅ API key set' : '❌ API key missing')\""
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "aframe": "^1.4.0"
+    "openai": "^4.0.0"
   },
   "devDependencies": {
-    "terser": "^5.24.0",
-    "clean-css": "^5.3.2",
-    "html-minifier-terser": "^7.2.0"
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.26.0"
   },
-  "keywords": ["vr", "ar", "webxr", "aframe", "openai"],
+  "keywords": [
+    "xr",
+    "vr",
+    "ar",
+    "webxr",
+    "vercel"
+  ],
   "author": "",
-  "license": "MIT",
-  "engines": {
-    "node": "22.x"
-  }
+  "license": "MIT"
 }
