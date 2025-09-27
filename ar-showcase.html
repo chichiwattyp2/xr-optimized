@@ -3,461 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR Showcase - XR Labs</title>
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
-    <script src="nav.js"></script>
+    <title>WebAR Model Placement</title>
     
-    <style>
-        body {
-            margin: 0;
-            background: #0a0a0f;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-        }
-        
-        .ar-ui {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(26, 26, 36, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            padding: 1rem 2rem;
-            color: white;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .ar-btn {
-            background: linear-gradient(135deg, #00d4ff, #8b5cf6);
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .ar-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
-        }
-        
-        .ar-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .ar-status {
-            position: fixed;
-            top: 80px;
-            left: 2rem;
-            background: rgba(26, 26, 36, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            color: white;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            max-width: 300px;
-        }
-        
-        .ar-instructions {
-            position: fixed;
-            top: 80px;
-            right: 2rem;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid #10b981;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            color: #10b981;
-            z-index: 100;
-            max-width: 250px;
-            font-size: 0.9rem;
-        }
-        
-        @media (max-width: 768px) {
-            .ar-ui {
-                bottom: 1rem;
-                left: 1rem;
-                right: 1rem;
-                transform: none;
-                padding: 1rem;
-            }
-            
-            .ar-status,
-            .ar-instructions {
-                position: relative;
-                top: auto;
-                left: auto;
-                right: auto;
-                margin: 1rem;
-                max-width: none;
-            }
-        }
-    </style>
+    <!-- A-Frame Core - Latest Version 1.7.0 -->
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    
+    <!-- AR.js for A-Frame (includes WebXR support) -->
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
+    
+    <!-- External Styles -->
+    <link rel="stylesheet" href="css/test.css">
 </head>
 <body>
-    <div class="ar-status" id="ar-status">
-        <h3>📱 AR Status</h3>
-        <div id="ar-support">Checking AR support...</div>
-        <div id="ar-session">Not in AR mode</div>
+    <!-- Instructions Overlay -->
+    <div id="instructions">
+        <h2>WebAR Model Placement</h2>
+        <p>📱 This app allows you to place 3D models in your real environment using AR</p>
+        <p>✨ Select a model from the panel and tap to place it in your space</p>
+        <p>🎯 Move your device to scan the environment for better tracking</p>
+        <button id="startButton" class="ar-button">Start AR Experience</button>
     </div>
 
-    <div class="ar-instructions">
-        <h4>📋 AR Instructions</h4>
-        <ol>
-            <li>Allow camera access</li>
-            <li>Point at flat surfaces</li>
-            <li>Tap to place objects</li>
-            <li>Pinch to scale objects</li>
-        </ol>
+    <!-- Status Indicator -->
+    <div id="status" class="hidden">
+        <span class="status-dot"></span>
+        <span id="statusText">Initializing AR...</span>
+    </div>
+<div class="ar-overlay">
+    <!-- Model Selection Panel -->
+    <div id="modelPanel" class="hidden">
+        <h3>Select Model</h3>
+        <!-- Primitive Models -->
+        <div class="model-category">Shapes</div>
+        <div class="model-option selected" data-model="cube" data-type="primitive">
+            <div class="model-icon">📦</div>
+            <div class="model-name">Cube</div>
+        </div>
+        <div class="model-option" data-model="sphere" data-type="primitive">
+            <div class="model-icon">⭕</div>
+            <div class="model-name">Sphere</div>
+        </div>
+        <div class="model-option" data-model="cylinder" data-type="primitive">
+            <div class="model-icon">⚪</div>
+            <div class="model-name">Cylinder</div>
+        </div>
+        <div class="model-option" data-model="torus" data-type="primitive">
+            <div class="model-icon">🍩</div>
+            <div class="model-name">Torus</div>
+        </div>
+        
+        <!-- GLB Models -->
+        <div class="model-category">3D Models</div>
+        <div class="model-option" data-model="robot" data-type="gltf">
+            <div class="model-icon">🤖</div>
+            <div class="model-name">Robot</div>
+        </div>
+        <div class="model-option" data-model="fox" data-type="gltf">
+            <div class="model-icon">🦊</div>
+            <div class="model-name">Fox</div>
+        </div>
+        <div class="model-option" data-model="avocado" data-type="gltf">
+            <div class="model-icon">🥑</div>
+            <div class="model-name">Avocado</div>
+        </div>
+        <div class="model-option" data-model="duck" data-type="gltf">
+            <div class="model-icon">🦆</div>
+            <div class="model-name">Duck</div>
+        </div>
     </div>
 
-    <a-scene 
-        background="color: #0a0a0f"
-        ar-mode-ui="enabled: true"
-        device-orientation-permission-ui="enabled: true"
+    <!-- AR Control Buttons -->
+    <div id="arControls" class="hidden">
+        <button id="placeButton" class="ar-button">Place Model</button>
+        <button id="clearButton" class="ar-button secondary">Clear All</button>
+        <button id="exitButton" class="ar-button secondary">Exit AR</button>
+    </div>
+
+ 
+</div>
+    <!-- Placement Reticle -->
+    <div id="reticle"></div>
+
+    <!-- A-Frame Scene -->
+    <a-scene
+        id="scene"
+        embedded
+        arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: true"
+        renderer="logarithmicDepthBuffer: true; precision: high; antialias: true; alpha: true; colorManagement: true;"
         webxr="requiredFeatures: hit-test,local-floor;
-               optionalFeatures: dom-overlay,unbounded;
-               overlayElement: #overlay;"
-        renderer="colorManagement: true; physicallyCorrectLights: true">
+               optionalFeatures: dom-overlay,anchors,light-estimation,hand-tracking,depth-sensing,plane-detection;
+               overlayElement: #arControls;"
+        ar-hit-test="target: #reticle; type: map"
+        ar-mode-ui="enabled: true"
+        device-orientation-permission-ui="enabled: true">
+        
+        <!-- Camera Entity for mobile support -->
+        <a-camera-static></a-camera-static>
         
         <!-- Assets -->
         <a-assets>
-            <a-mixin id="cube" 
-                     geometry="primitive: box; width: 0.3; height: 0.3; depth: 0.3"
-                     material="color: #00d4ff; metalness: 0.2; roughness: 0.8"
-                     shadow="cast: true; receive: true"
-                     animation="property: rotation; to: 0 360 0; loop: true; dur: 3000">
-            </a-mixin>
+            <!-- GLB Models - Add your model URLs here -->
+            <!-- Example models from CDN (replace with your own) -->
+            <a-asset-item id="robotModel" src="robot.glb"></a-asset-item>
+            <a-asset-item id="foxModel" src="fox.glb"></a-asset-item>
+            <a-asset-item id="avocadoModel" src="adidas.glb"></a-asset-item>
+            <a-asset-item id="duckModel" src="duck.glb"></a-asset-item>
             
-            <a-mixin id="sphere"
-                     geometry="primitive: sphere; radius: 0.15"
-                     material="color: #8b5cf6; metalness: 0.3; roughness: 0.7"
-                     shadow="cast: true; receive: true"
-                     animation="property: scale; to: 1.2 1.2 1.2; direction: alternate; loop: true; dur: 2000">
-            </a-mixin>
-            
-            <a-mixin id="pyramid"
-                     geometry="primitive: cone; radiusBottom: 0.2; radiusTop: 0; height: 0.4"
-                     material="color: #10b981; metalness: 0.1; roughness: 0.9"
-                     shadow="cast: true; receive: true">
-            </a-mixin>
+            <!-- Define reusable materials -->
+            <a-mixin id="cube-material" material="color: #4CC3D9; metalness: 0.7; roughness: 0.3"></a-mixin>
+            <a-mixin id="sphere-material" material="color: #EF2D5E; metalness: 0.8; roughness: 0.2"></a-mixin>
+            <a-mixin id="cylinder-material" material="color: #7BC8A4; metalness: 0.6; roughness: 0.4"></a-mixin>
+            <a-mixin id="torus-material" material="color: #FFC65D; metalness: 0.7; roughness: 0.3"></a-mixin>
         </a-assets>
 
-        <!-- Lighting for AR -->
-        <a-light type="ambient" color="#404040" intensity="0.4"></a-light>
-        <a-light type="directional" 
-                 position="1 2 1" 
-                 color="#ffffff" 
-                 intensity="0.8"
-                 shadow="cast: true; shadowMapWidth: 2048; shadowMapHeight: 2048">
-        </a-light>
-
-        <!-- Demo objects (only visible in non-AR mode) -->
-        <a-entity id="demo-objects" visible="true">
-            <a-box mixin="cube" position="-1 0.5 -3"></a-box>
-            <a-sphere mixin="sphere" position="0 0.5 -3"></a-sphere>
-            <a-cone mixin="pyramid" position="1 0.5 -3"></a-cone>
-            
-            <!-- Demo floor -->
-            <a-plane 
-                position="0 0 -3" 
-                rotation="-90 0 0" 
-                width="4" 
-                height="4" 
-                color="#1a1a24" 
-                shadow="receive: true">
-            </a-plane>
-            
-            <!-- Instructions -->
-            <a-text 
-                value="AR Showcase Demo\n\nIn AR mode:\n• Look around to find flat surfaces\n• Tap to place virtual objects\n• Objects will appear on real surfaces"
-                position="0 2 -3"
-                align="center"
-                color="#00d4ff"
-                width="6">
-            </a-text>
+        <!-- Camera with AR capabilities -->
+        <a-entity camera position="0 1.6 0" look-controls wasd-controls ar-cursor>
+            <a-entity 
+                id="cursor"
+                cursor="rayOrigin: mouse; fuse: true; fuseTimeout: 500"
+                raycaster="objects: .clickable; far: 100"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                material="color: white; shader: flat; opacity: 0.5"
+                animation__click="property: scale; startEvents: click; easing: easeInOutCubic; dur: 150; from: 1 1 1; to: 1.5 1.5 1.5"
+                animation__clickback="property: scale; startEvents: clickback; easing: easeInOutCubic; dur: 150; from: 1.5 1.5 1.5; to: 1 1 1"
+                visible="false">
+            </a-entity>
         </a-entity>
 
-        <!-- AR Hit test reticle (invisible until AR mode) -->
-        <a-entity 
-            id="reticle"
-            visible="false"
-            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.04"
-            material="color: #00d4ff; opacity: 0.8; transparent: true; shader: flat"
+        <!-- Lighting setup for AR -->
+        <a-light type="ambient" color="#ffffff" intensity="0.5"></a-light>
+        <a-light type="directional" color="#ffffff" intensity="0.5" position="-0.5 1 1"></a-light>
+
+        <!-- Container for placed models -->
+        <a-entity id="modelContainer"></a-entity>
+
+        <!-- Ground plane indicator (will be positioned via hit-test) -->
+        <a-plane
+            id="groundPlane"
             rotation="-90 0 0"
-            animation="property: rotation; to: -90 0 360; loop: true; dur: 2000">
-        </a-entity>
-
-        <!-- AR placed objects container -->
-        <a-entity id="placed-objects"></a-entity>
-
-        <!-- Camera rig -->
-        <a-entity id="rig" position="0 1.6 0">
-            <a-camera 
-                id="camera"
-                cursor="rayOrigin: mouse; fuse: false"
-                raycaster="objects: .clickable; far: 100">
-            </a-camera>
-        </a-entity>
+            width="0.5"
+            height="0.5"
+            material="color: white; opacity: 0.3"
+            visible="false">
+        </a-plane>
     </a-scene>
 
-    <div class="ar-ui" id="overlay">
-        <button class="ar-btn" id="enter-ar" onclick="enterAR()" disabled>
-            📱 Enter AR
-        </button>
-        <button class="ar-btn" onclick="placeObject('cube')">
-            📦 Place Cube
-        </button>
-        <button class="ar-btn" onclick="placeObject('sphere')">
-            🔮 Place Sphere
-        </button>
-        <button class="ar-btn" onclick="placeObject('pyramid')">
-            📐 Place Pyramid
-        </button>
-        <button class="ar-btn" onclick="clearObjects()">
-            🗑️ Clear All
-        </button>
-    </div>
-
-    <script>
-        let arSession = null;
-        let hitTestSource = null;
-        let reticle = null;
-        let currentObjectType = 'cube';
-        let placedObjectsCount = 0;
-
-        // AR Support Detection
-        async function checkARSupport() {
-            const statusEl = document.getElementById('ar-support');
-            const enterBtn = document.getElementById('enter-ar');
-            
-            if (!navigator.xr) {
-                statusEl.innerHTML = '❌ WebXR not supported';
-                statusEl.style.color = '#ef4444';
-                return;
-            }
-            
-            try {
-                const supported = await navigator.xr.isSessionSupported('immersive-ar');
-                if (supported) {
-                    statusEl.innerHTML = '✅ AR supported';
-                    statusEl.style.color = '#10b981';
-                    enterBtn.disabled = false;
-                } else {
-                    statusEl.innerHTML = '⚠️ AR not available';
-                    statusEl.style.color = '#f59e0b';
-                }
-            } catch (error) {
-                statusEl.innerHTML = '❓ AR support unknown';
-                statusEl.style.color = '#6b7280';
-            }
-        }
-
-        // Enter AR Mode
-        async function enterAR() {
-            const scene = document.querySelector('a-scene');
-            if (scene.is('ar-mode')) {
-                scene.exitAR();
-            } else {
-                scene.enterAR();
-            }
-        }
-
-        // Place Object at Reticle Position
-        function placeObject(type) {
-            currentObjectType = type;
-            
-            if (arSession) {
-                const reticleEl = document.getElementById('reticle');
-                if (reticleEl.getAttribute('visible')) {
-                    placeObjectAt(reticleEl.getAttribute('position'));
-                }
-            } else {
-                // Demo mode - place in front of camera
-                const camera = document.getElementById('camera');
-                const cameraPos = camera.getAttribute('position');
-                const placementPos = {
-                    x: (Math.random() - 0.5) * 2,
-                    y: cameraPos.y - 0.5,
-                    z: cameraPos.z - 2
-                };
-                placeObjectAt(placementPos);
-            }
-        }
-
-        // Place Object at Specific Position
-        function placeObjectAt(position) {
-            const container = document.getElementById('placed-objects');
-            const object = document.createElement('a-entity');
-            
-            // Set position
-            object.setAttribute('position', position);
-            
-            // Apply mixin based on type
-            object.setAttribute('mixin', currentObjectType);
-            
-            // Add click interaction
-            object.classList.add('clickable');
-            object.addEventListener('click', () => {
-                // Remove object on click
-                object.parentNode.removeChild(object);
-                placedObjectsCount--;
-                updateARStatus();
-            });
-
-            // Add to scene
-            container.appendChild(object);
-            placedObjectsCount++;
-            updateARStatus();
-            
-            // Add placement animation
-            object.setAttribute('animation__appear', {
-                property: 'scale',
-                from: '0 0 0',
-                to: '1 1 1',
-                dur: 500,
-                easing: 'easeOutBack'
-            });
-
-            console.log(`Placed ${currentObjectType} at`, position);
-        }
-
-        // Clear All Objects
-        function clearObjects() {
-            const container = document.getElementById('placed-objects');
-            container.innerHTML = '';
-            placedObjectsCount = 0;
-            updateARStatus();
-            console.log('Cleared all objects');
-        }
-
-        // Update AR Status Display
-        function updateARStatus() {
-            const sessionEl = document.getElementById('ar-session');
-            const enterBtn = document.getElementById('enter-ar');
-            
-            if (arSession) {
-                sessionEl.innerHTML = `🥽 AR Active - Objects: ${placedObjectsCount}`;
-                sessionEl.style.color = '#10b981';
-                enterBtn.textContent = '📱 Exit AR';
-            } else {
-                sessionEl.innerHTML = `🖥️ Demo Mode - Objects: ${placedObjectsCount}`;
-                sessionEl.style.color = '#f59e0b';
-                enterBtn.textContent = '📱 Enter AR';
-            }
-        }
-
-        // Scene Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            const scene = document.querySelector('a-scene');
-            reticle = document.getElementById('reticle');
-            
-            // AR session events
-            scene.addEventListener('enter-ar', () => {
-                console.log('Entered AR mode');
-                arSession = scene.xrSession;
-                
-                // Hide demo objects
-                document.getElementById('demo-objects').setAttribute('visible', false);
-                
-                // Show reticle
-                reticle.setAttribute('visible', true);
-                
-                updateARStatus();
-            });
-            
-            scene.addEventListener('exit-ar', () => {
-                console.log('Exited AR mode');
-                arSession = null;
-                
-                // Show demo objects
-                document.getElementById('demo-objects').setAttribute('visible', true);
-                
-                // Hide reticle
-                reticle.setAttribute('visible', false);
-                
-                updateARStatus();
-            });
-
-            // Click to place objects (in AR mode)
-            scene.addEventListener('click', (event) => {
-                if (arSession && event.detail.intersection) {
-                    const intersection = event.detail.intersection;
-                    placeObjectAt(intersection.point);
-                }
-            });
-
-            // Initialize
-            checkARSupport();
-            updateARStatus();
-            
-            console.log('📱 AR Showcase loaded');
-            console.log('🎯 Click objects to remove them');
-            console.log('📋 Use AR mode for real surface detection');
-        });
-
-        // Performance monitoring
-        window.addEventListener('load', () => {
-            if (window.xrOptimizer) {
-                console.log('AR optimizations active');
-            }
-
-            // Demo animation for non-AR mode
-            if (!navigator.xr) {
-                const demoObjects = document.querySelectorAll('#demo-objects a-box, #demo-objects a-sphere, #demo-objects a-cone');
-                demoObjects.forEach((obj, index) => {
-                    setTimeout(() => {
-                        obj.setAttribute('animation__bounce', {
-                            property: 'position',
-                            to: obj.getAttribute('position').x + ' 1 ' + obj.getAttribute('position').z,
-                            dur: 1000,
-                            direction: 'alternate',
-                            loop: true,
-                            easing: 'easeInOutQuad'
-                        });
-                    }, index * 500);
-                });
-            }
-        });
-
-        // Touch controls for mobile
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
-            
-            const deltaX = Math.abs(touchEndX - touchStartX);
-            const deltaY = Math.abs(touchEndY - touchStartY);
-            
-            // If it's a tap (not a swipe)
-            if (deltaX < 30 && deltaY < 30) {
-                if (arSession) {
-                    // In AR mode, place object where tapped
-                    placeObject(currentObjectType);
-                }
-            }
-        });
-    </script>
+    <!-- External JavaScript -->
+    <script src="app.js"></script>
 </body>
 </html>
