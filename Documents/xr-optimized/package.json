@@ -1,0 +1,32 @@
+{
+  "name": "xr-optimized",
+  "version": "2.0.0",
+  "description": "XR-optimized web application with build optimization",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "node js/build.js",
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "glob": "^11.0.3",
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.26.0"
+  },
+  "keywords": [
+    "xr",
+    "vr",
+    "ar",
+    "webxr",
+    "vercel"
+  ],
+  "author": "",
+  "license": "MIT"
+}
